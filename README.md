@@ -8,4 +8,4 @@ http://iihm.imag.fr/blanch/teaching/infovis/datasets/2019-wid/README.md
 https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation
 
 ### Example Query
-`https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation`
+`http://api.worldbank.org/v2/country/BR/indicators/NY.GDP.MKTP.CD?format=json`
