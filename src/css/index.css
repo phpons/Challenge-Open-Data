@@ -1,0 +1,15 @@
+html, body {
+    height: 100%; /*Fixes the height to 100% of the viewport*/
+}
+
+body {
+    padding-top: 100px;
+}
+
+.container {
+    padding-top: 10px;
+}
+#image-holder {
+    border: 1px solid black;
+}
+

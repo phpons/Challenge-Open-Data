@@ -1,14 +1,62 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>The title</title>
-        <link rel="stylesheet" href="css/index.css">
-    </head>
-    <body>
-        <nav></nav>
-        <main></main>
-        <footer></footer>
-    </body>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/index.css?v=2">
+    <title>Effects of Inequality</title>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top">
+            <div class="container">
+                <a href="#" class="navbar-brand">The Effects of Inequality</a>
+
+                <div class="collapse navbar-collapse" id="navmenu">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a href="#charts" class="nav-link">Charts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#rapport" class="nav-link">Rapport</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main -->
+    <main role="main" class="container">
+        <!-- Selector with the chart options -->
+        <select id="image-selector" class="form-select" aria-label="Default select example"
+            onchange="displayImage(this)">
+            <option selected>Select a Graph to Display</option>
+            <option value="1">GDP per Capita</option>
+            <option value="2">Inequality Index</option>
+            <option value="3">Homicide Rate per 100.000 People</option>
+        </select>
+
+        <!-- The charts should be displayed here -->
+        <div class="container d-flex justify-content-center">
+            <div class="col-md-4 px-0" id="image-holder">
+                <img src="https://i.ibb.co/f2Sjd0W/gdp-capita.png" id="test-image" class="img-fluid"
+                    alt="Responsive image">
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <script src="js/index.js"></script>
+</body>
+
 </html>
