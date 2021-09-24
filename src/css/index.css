@@ -9,3 +9,9 @@ main {
 #logo_ensimag {
   max-height: none;
 }
+
+#notification {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}

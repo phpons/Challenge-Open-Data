@@ -43,13 +43,9 @@
   <main class="container is-fluid mt-3 mb-3">
 
     <!-- Visualisation -->
-    <div id="visualisation">
-      <p> Ici se trouve la heatmap et les graphes</p>
-      <div id="heatmap">
-        <div id="container">
-          <div id="map"></div>
-        </div>
-      </div>
+    <div id="visualisation" class="is-justify-content-center">
+      <div id="map"></div>
+      <div id="selected-countries" class="is-justify-content-center field is-grouped is-grouped-multiline"></div>
     </div>
 
     <!-- Documentation -->
@@ -211,9 +207,15 @@
     </div>
   </footer>
 
+  <!-- Notification -->
+  <div id="notification"></div>
+
   <!-- Scripts -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="js/world-countries-no-antartica.js"></script>
+  <script src="js/country-selection-management.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/utils.js"></script>
   <script src="js/index.js"></script>
 </body>
 
