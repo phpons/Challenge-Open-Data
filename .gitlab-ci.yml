@@ -1,0 +1,9 @@
+stages:
+  - test
+
+w3c-validation:
+  stage: test
+  before_script:
+    - apk add --no-cache bash curl jq
+  script:
+    - ci/w3c-html-validation.sh
