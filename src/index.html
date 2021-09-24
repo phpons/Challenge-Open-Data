@@ -3,14 +3,58 @@
 
 <head>
   <meta charset="utf-8">
-  <title>The title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Challenge Open Data</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
   <link rel="stylesheet" href="css/index.css">
 </head>
 
-<body>
-  <nav></nav>
-  <main></main>
-  <footer></footer>
+<body class="is-flex is-flex-direction-column">
+  <nav class="navbar is-light is-spaced">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <img src="img/logo_ensimag_150.png" alt="logo_ensimag" id="logo_ensimag">
+      </div>
+    </div>
+
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <div class="navbar-item">
+          Challenge Open Data
+        </div>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <a class="navbar-item is-active" id="nav_visu" onclick="switchPage(this.id)">
+            Visualisation des données
+          </a>
+
+          <a class="navbar-item" id="nav_doc" onclick="switchPage(this.id)">
+            Documentation
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main class="container is-fluid">
+    <div id="visualisation">
+      <p> Ici se trouve la heatmap et les graphes</p>
+    </div>
+    <div id="documentation" class="is-hidden">
+      <p> Ici se trouve la documentation</p>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        Projet Challenge Open Data 2021-2022 - ISI 3A
+      </p>
+      <p>
+        BARRAU Léa, BLANCO Manon, PILLEYRE Alexandre, PONS FIORENTIN Pedro Henrique, SOLO KWAN Léa
+      </p>
+    </div>
+  </footer>
   <script src="js/index.js"></script>
 </body>
 
