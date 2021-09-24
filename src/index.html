@@ -10,6 +10,7 @@
 </head>
 
 <body class="is-flex is-flex-direction-column">
+  <!-- Navbar -->
   <nav class="navbar is-light is-spaced">
     <div class="navbar-brand">
       <div class="navbar-item">
@@ -37,14 +38,163 @@
       </div>
     </div>
   </nav>
-  <main class="container is-fluid">
+
+  <!-- Main -->
+  <main class="container is-fluid mt-3 mb-3">
+
+    <!-- Visualisation -->
     <div id="visualisation">
       <p> Ici se trouve la heatmap et les graphes</p>
     </div>
-    <div id="documentation" class="is-hidden">
-      <p> Ici se trouve la documentation</p>
+
+    <!-- Documentation -->
+    <div id="documentation" class="is-hidden content">
+      <p>
+        Ce projet s'incrit dans le cadre de la <strong> 3ème année ISI</strong> à l'
+        <a href="https://ensimag.grenoble-inp.fr/" target="_blank">Ensimag</a>. Le cours de
+        <strong><q>Challenge Open Data</q></strong> a pour objectif de développer une application Web de visualisation
+        interactive de données. Cette page Web a été conçu en <strong>une semaine</strong> par Léa BARRAU, Manon BLANCO,
+        Alexandre PILLEYRE, Pedro Henrique PONS FIORENTIN et Léa SOLO KWAN
+      </p>
+      <hr />
+
+      <h1 class="title">Jeux de données</h1>
+      <p>
+        Nos données sont servies par l’API de <a href=" https://www.worldbank.org" target="_blank">World Bank</a>.
+        Nous utilisons notamment les données concernant la <strong>pauvreté</strong>, les <strong>inégalités</strong> et
+        l’<strong>environnement</strong>. Une description de leur API est disponible
+        <a href="https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information" target="_blank">ici</a>.
+      </p>
+      <div class="subtitle">Données libres</div>
+      <p>
+        Nous avons vérifié que les données utilisées sont <strong>libres</strong>. En effet, dans les
+        <a href="https://www.worldbank.org/en/about/legal/terms-of-use-for-datasets" target="_blank">conditions
+          d’utilisation</a> nous pouvons lire :
+        <q>
+          You may extract, download, and make copies of the data contained in the Datasets, and you may share that data
+          with third parties according to these terms of use.
+        </q>
+        Malheureusement, nous n’avons pas pu vérifier les conditions d’utilisation de l’API puisque le
+        <a href="http://www.worldbank.org/terms" target="_blank">lien mentionné</a> dans leur
+        <strong>documentation est invalide</strong>. Mais l’API étant utilisée par
+        <a href="http://lig-tdcge.imag.fr/~sylvain/opendata/2020-2021/allalio-elmourim-elmouraa-foulont-gaisnea/index.html" target="_blank">
+        un groupe précédent</a> nous en avons déduit que <strong>son utilisation était autorisée</strong> dans le
+        cadre de ce projet.
+      </p>
+      <div class="subtitle">Indicateurs et données utilisés</div>
+      <p>
+        Nous utilisons les données provenant de <strong> différents indicateurs</strong>. Tous les indicateurs nous
+        viennent de World Bank et sont disponibles dans la section <q>Data Themes</q> de
+        <a href="https://datatopics.worldbank.org/world-development-indicators/" target="_blank">leur site</a>. Nous
+        nous sommes intéressé en particulier aux données traitant :
+      </p>
+      <ul>
+        <li>des émissions de CO₂</li>
+        <!-- TODO: Décommenter les indicateurs pour chaque implémentation -->
+        <!-- <li>de l’<a href="https://www.insee.fr/fr/metadonnees/definition/c1551" target="_blank">indice de GINI</a> estimé par World Bank</li> -->
+        <!-- <li>du PIB par pays</li> -->
+        <!-- <li>du taux de chômage</li> -->
+        <!-- <li>de la part de consommation utilisant les énergies renouvelables</li> -->
+      </ul>
+      <p>
+        Nous avons spécifiquement choisi ces indicateurs, car ils ont tous un lien avec le
+        <strong>développement durable</strong> (notamment l’environnement) et la
+        <strong>responsabilité sociale</strong>.
+      </p>
+
+      <hr />
+
+      <h1 class="title">Traitements opérés</h1>
+      <p>
+        Pour des questions de <strong>pérennité</strong>, nous avons choisi d'avoir les données disponibles
+        <a href="./index.csv" target="_blank">directement sur notre site</a>. Nous avons choisi le format
+        <strong>CSV</strong> pour répondre aux <strong>contraintes de taille</strong> de notre site. En effet, celui-ci
+        doit faire <strong>moins de 10Mo</strong>.
+      </p>
+      <div class="subtitle">Récupération des données</div>
+      <p>
+        Dans un premier temps, nous avons <strong>téléchargé</strong> toutes les données au format CSV depuis le site de
+        World Bank. Leur site propose d'accéder facilement à leurs données dans des formats prédéterminés (API, XLS,
+        CSV, DataBank).
+      </p>
+      <div class="subtitle">Nettoyage et agrégation des données</div>
+      <p>
+        Afin de répondre aux contraintes de taille, nous avons décidé d'agréger toutes les données dans un
+        <strong>unique fichier CSV</strong> afin d'éviter le dédoublement d'information. De plus, nous avons aussi
+        réduit le nombre de données en limitant les dates utilisées. Les données disponibles sur notre site datent de
+        <strong>2010 au plus tôt</strong>. Ce dernier choix, nous permet aussi de nettoyer nos données puisque qu'avant
+        2010, les informations ne sont pas toujours présentes pour tous les pays. Pour réaliser cette tâche, nous avons
+        écrit un script <a href="https://www.python.org/" target="_blank">Python</a> utilisant la librairie
+        <a href="https://pandas.pydata.org/" target="_blank">Pandas</a>.
+      </p>
+
+      <hr />
+
+      <h1 class="title">Choix des technologies</h1>
+      <p>
+        Notre site utilise évidemment les <strong>langagues Web de base</strong> (HTML, CSS et Javascript). Mais
+        concernant les représentations graphiques nous avons dû faire certains choix techniques.
+      </p>
+      <div class="subtitle">Heatmap et Graphiques</div>
+      <p>
+        Pour la carte et les graphiques notre choix s'est arrêté sur la librairie
+        <a href="https://d3js.org/" target="_blank">D3.js</a>. Cette librairie nous permet de facilement manipuler des
+        documents à partir des données.
+      </p>
+      <div class="subtitle">Style</div>
+      <p>
+        Pour simplifier les développements, nous avons choisi d'utiliser le framework
+        <a href="https://bulma.io/" target="_blank">Bulma</a> pour la présentation de notre page Web.
+      </p>
+
+      <hr />
+
+      <h1 class="title">Workflow</h1>
+      <p>
+        Le schéma ci-dessous résume le traitement des données qui a été fait et les choix technologiques :
+      </p>
+      <img class="is-flex is-justify-content-center" src="TODO" alt="Résumé des traitements des données et des choix technologiques" />
+
+      <hr />
+
+      <h1 class="title">Architecture</h1>
+      <p>
+        Notre avons voulu que notre application reste <strong>minimale</strong>. Pour cela, nous avons découpé notre
+        projet selon les langagues de notre projet. Nous avons donc:
+      </p>
+      <ul>
+        <li>un fichier <code>index.html</code> qui est l'entrée de notre page Web</li>
+        <li>un dossier <code>js</code> qui contient tous les fichiers Javascript</li>
+        <!-- TODO: Décommenter si on utilise un fichier css -->
+        <!-- <li>un dossier <code>css</code> qui contient tous les fichiers CSS</li> -->
+      </ul>
+
+      <hr />
+
+      <h1 class="title">Résultat de l'analyse de notre page web</h1>
+      <div class="subtitle">GreenIT Analysis</div>
+      <p>
+        Comme on peut le lire sur
+        <a href="https://github.com/cnumr/GreenIT-Analysis/blob/master/README.md" target="_blank">le github de
+          leur projet</a> :
+        <q>
+          GreenIT Analysis est une extension pour navigateur qui permet de quantifier les impacts environnementaux d'un
+          parcours utilisateur complet, même derrière un firewall et / ou une authentification applicative. L'outil
+          vérifie également l'utilisation de bonnes pratiques visant à diminuer ces impacts.
+        </q>
+      </p>
+      <p>Le résultat de cette analyse sur notre page Web est le suivant :</p>
+      <img class="is-flex is-justify-content-center" src="TODO" alt="Résultat de l'analyse de notre page Web par GreenIT Analysis" />
+      <div class="subtitle">Standards W3C</div>
+      <p>
+        Nous avons tenu à ce que notre page Web corresponde aux
+        <a href="https://www.w3c.fr/standards" target="_blank">standards W3C</a>. Nous avons donc utilisé
+        <a href="https://validator.w3.org" target="_blank">leur validateur HTML</a> pour valider notre page.
+      </p>
     </div>
   </main>
+
+  <!-- Footer -->
   <footer class="footer">
     <div class="content has-text-centered">
       <p>
@@ -55,6 +205,8 @@
       </p>
     </div>
   </footer>
+
+  <!-- Scripts -->
   <script src="js/index.js"></script>
 </body>
 
