@@ -10,5 +10,10 @@
     "ecmaVersion": 12
   },
   "rules": {
+  },
+  "globals": {
+    "d3": true,
+    "WORLD_MAP_JSON": true,
+    "csvData": true
   }
 }
