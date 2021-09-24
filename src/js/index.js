@@ -1,24 +1,6 @@
 'use strict'
 
-// Permet de switcher entre la page documentation et la page visualisation de données
-// eslint-disable-next-line no-unused-vars
-function switchPage (id) {
-  const documentation = document.getElementById('documentation')
-  const visualization = document.getElementById('visualisation')
-  const navVisu = document.getElementById('nav_visu')
-  const navDoc = document.getElementById('nav_doc')
-  if (
-    (id === 'nav_doc' && documentation.classList.contains('is-hidden')) ||
-    (id === 'nav_visu' && visualization.classList.contains('is-hidden'))
-  ) {
-    visualization.classList.toggle('is-hidden')
-    documentation.classList.toggle('is-hidden')
-    navVisu.classList.toggle('is-active')
-    navDoc.classList.toggle('is-active')
-  }
-}
-
-const WIDTH = document.getElementById('container').offsetWidth * 0.95
+const WIDTH = document.getElementById('visualisation').offsetWidth * 0.95
 const HEIGHT = 500
 
 function initSvg () {
@@ -57,7 +39,9 @@ function initMap (svg) {
     .enter()
     .append('path')
     .attr('d', path)
-    .attr('id', (currentCountry) => 'code' + currentCountry.id)
+    .attr('id', (currentCountry) => currentCountry.id)
+    .attr('name', (currentCountry) => currentCountry.properties.name)
+    .on('click', updateSelectedCountries)
     .attr('class', 'country')
     .style('fill', 'grey') // default color
 }
@@ -66,5 +50,6 @@ function main () {
   const svg = initSvg()
   initMap(svg)
 }
+
 // Use window.onload event to launch the main function when loading process has ended
 window.onload = main

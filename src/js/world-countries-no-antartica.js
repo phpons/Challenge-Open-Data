@@ -1,3 +1,5 @@
+'use strict'
+
 // eslint-disable-next-line no-unused-vars
 const WORLD_MAP_JSON = {
   type: 'FeatureCollection',

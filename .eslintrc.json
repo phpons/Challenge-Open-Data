@@ -13,7 +13,10 @@
   },
   "globals": {
     "d3": true,
+    "csvData": true,
     "WORLD_MAP_JSON": true,
-    "csvData": true
+    "updateSelectedCountries": true,
+    "displayNotification": true,
+    "removeNotificationElement": true
   }
 }
