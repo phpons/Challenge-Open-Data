@@ -7,3 +7,29 @@ w3c-validation:
     - apk add --no-cache bash curl jq
   script:
     - ci/w3c-html-validation.sh
+
+html-lint:
+  stage: test
+  image: node:latest
+  before_script:
+    - npm install -g html-linter
+  script:
+    - html-linter --config .htmllintrc.json
+
+style-lint:
+  stage: test
+  image: node:latest
+  before_script:
+    - npm install -g stylelint
+    - npm install --save-dev stylelint-config-standard
+  script:
+    - stylelint src/css/
+
+js-lint:
+  stage: test
+  image: node:latest
+  before_script:
+    - npm install -g eslint
+    - npm install --save-dev eslint-config-standard
+  script:
+    - eslint src/js/
