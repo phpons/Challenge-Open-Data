@@ -13,7 +13,7 @@
   },
   "globals": {
     "d3": true,
-    "csvData": true,
+    "CSV_DATA": true,
     "WORLD_MAP_JSON": true,
     "updateSelectedCountries": true,
     "displayNotification": true,
