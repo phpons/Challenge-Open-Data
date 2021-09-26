@@ -28,7 +28,10 @@ function getColorIndex (color) {
 
 function parseCSV (csv, separator = ',') {
   const stringRows = csv.split('\n').map((str) => str.trim())
-  const headers = stringRows.shift().split(separator)
+  const headers = stringRows
+    .shift()
+    .split(separator)
+    .map((str) => str.trim())
   const table = []
   stringRows.forEach((stringRow) => {
     const row = Object()
@@ -37,7 +40,7 @@ function parseCSV (csv, separator = ',') {
     })
     table.push(row)
   })
-  return table
+  return { csvValues: table, csvHeaders: headers }
 }
 
 function getMinMaxFromColumn (values, column) {
@@ -67,7 +70,8 @@ class WorldHeatMap {
     this.width = WIDTH
     this.height = HEIGHT
 
-    this.csvDatas = csvDatas
+    this.rawCsvDatas = csvDatas
+
     this.geojson = geojson
     this.countryCodeColumn = countryCodeColumn
     this.valuesColumn = valuesColumn
@@ -96,7 +100,8 @@ class WorldHeatMap {
   }
 
   initZoom () {
-    this.zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', this.zoomed)
+    // the more the scale extend the more you can zoom
+    this.zoom = d3.zoom().scaleExtent([1, 200]).on('zoom', this.zoomed)
     this.svg.call(this.zoom)
   }
 
@@ -185,6 +190,14 @@ class WorldHeatMap {
 
   get subtitle () {
     return this.d3Subtitle.text()
+  }
+
+  get csvDatas () {
+    return this.rawCsvDatas.filter((value) => this.isValidValue(value))
+  }
+
+  set csvDatas (datas) {
+    this.rawCsvDatas = datas
   }
 
   initTitleAndSubtitle () {
@@ -320,7 +333,9 @@ class WorldHeatMap {
     this.tooltip
       .select('#tooltip-country')
       .text(shortCountryName(value[(this, this.countryNameColumn)]))
-    this.tooltip.select('#tooltip-score').text(`${(+value[this.valuesColumn]).toFixed(2)}`)
+    this.tooltip
+      .select('#tooltip-score')
+      .text(`${this.formatValue(+value[this.valuesColumn])}`)
     this.legend
       .select('#cursor')
       .attr(
@@ -344,21 +359,33 @@ class WorldHeatMap {
     this.tooltip.attr('transform', `translate(${mouse[0]},${mouse[1] - 75})`)
   }
 
-  colorCountries () {
+  isValidValue (value) {
+    return value[this.valuesColumn] !== ''
+  }
+
+  colorCountry (countryPath, value) {
+    countryPath
+      .attr('scorecolor', this.scaleQuantile(+value[this.valuesColumn]))
+      .style('fill', this.scaleQuantile(+value[this.valuesColumn]))
+  }
+
+  bindCountryEvent (countryPath, value) {
+    countryPath
+      .on('mouseover', () => this.onCountryMouseOver(countryPath, value))
+      .on('mouseout', () => this.onCountryMouseOut(countryPath, value))
+      .on('mousemove', (evt) => this.onCountryMouseMove(evt))
+  }
+
+  colorAndBindCountries () {
     this.csvDatas.forEach((value, index) => {
       const countryPath = d3.select(`#${value[this.countryCodeColumn]}`)
-      countryPath.attr('style', null) // resetting default color
-      countryPath
-        .attr('scorecolor', this.scaleQuantile(+value[this.valuesColumn]))
-        .style('fill', this.scaleQuantile(+value[this.valuesColumn]))
-        .on('mouseover', () => this.onCountryMouseOver(countryPath, value))
-        .on('mouseout', () => this.onCountryMouseOut(countryPath, value))
-        .on('mousemove', (evt) => this.onCountryMouseMove(evt))
+      this.colorCountry(countryPath, value)
+      this.bindCountryEvent(countryPath, value)
     })
   }
 
   draw () {
-    this.colorCountries()
+    this.colorAndBindCountries()
     this.svg.selectAll('#svg-countries path').attr('d', this.path)
   }
 
@@ -373,14 +400,55 @@ class WorldHeatMap {
     this.updateDisplay()
   }
 
-  updateLegendScaleDomain () {
+  estimateAxisFormat () {
+    if (this.valuesColumn.includes('$')) {
+      return d3.format('$~s')
+    } else if (
+      this.valuesColumn.includes('%') ||
+      this.valuesColumn.includes('Unemployment')
+    ) {
+      return (d) => d + '%'
+    } else {
+      return d3.format('~s')
+    }
+  }
+
+  formatValue (value) {
+    let options = {}
+    let suffix = ''
+    if (this.valuesColumn.includes('$')) {
+      options = { style: 'currency', currency: 'USD' }
+    } else if (
+      this.valuesColumn.includes('%') ||
+      this.valuesColumn.includes('Unemployment')
+    ) {
+      suffix = ' %'
+    }
+    return new Intl.NumberFormat('fr-FR', options).format(value) + suffix
+  }
+
+  updateLegend () {
+    const format = this.estimateAxisFormat()
     this.legendScale.domain([this.minCsvValue, this.maxCsvValue])
-    this.legend.select('.axis').call(d3.axisLeft(this.legendScale))
+    this.legend
+      .select('.axis')
+      .call(d3.axisLeft(this.legendScale).tickFormat(format))
+  }
+
+  resetCountries () {
+    this.svg
+      .selectAll('#svg-countries path')
+      .attr('scorecolor', null)
+      .attr('style', null)
+      .on('mouseover', null)
+      .on('mouseout', null)
+      .on('mousemove', null)
   }
 
   updateDisplay () {
     this.updateMinMaxQuantile()
-    this.updateLegendScaleDomain()
+    this.updateLegend()
+    this.resetCountries()
     this.draw()
   }
 
@@ -400,23 +468,47 @@ class WorldHeatMap {
   }
 }
 
+function isIndicator (string) {
+  return (
+    string !== 'Country Name' && string !== 'Year' && string !== 'ISO_Country'
+  )
+}
+
+function addIndicatorsToSelector (selector, values) {
+  for (const header of values) {
+    if (isIndicator(header)) {
+      const option = document.createElement('option')
+      option.value = header
+      option.innerHTML = header
+      selector.appendChild(option)
+    }
+  }
+}
+
 function main () {
-  const csvValues = parseCSV(CSV_DATA)
+  const { csvValues, csvHeaders } = parseCSV(CSV_DATA)
   // TODO: temporary cause year selection is in another issue
-  const filtereValues = csvValues.filter((val) => val.Year === '2000')
+  const filteredValues = csvValues.filter((val) => val.Year === '2000')
+
+  const indicatorSelector = document.getElementById('indicators-select')
+  addIndicatorsToSelector(indicatorSelector, csvHeaders)
 
   const map = new WorldHeatMap(
     // csvValues,
-    filtereValues,
+    filteredValues,
     WORLD_MAP_JSON,
     'ISO_Country',
     'Country Name',
-    'CO2 emissions (metric tons per capita)'
+    indicatorSelector.value
   )
   window.addEventListener('resize', map.resize.bind(map))
   document
     .getElementById('reset-zoom-button')
     .addEventListener('click', map.resetZoom.bind(map))
+  indicatorSelector.addEventListener('change', (evt) => {
+    map.valuesColumn = evt.target.value
+    map.updateDisplay()
+  })
 }
 // Use window.onload event to launch the main function when loading process has ended
 window.onload = main
