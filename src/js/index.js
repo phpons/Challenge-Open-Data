@@ -32,11 +32,13 @@ function main () {
 
   const filteredValues = CSV_VALUES.filter((val) => val.Year === selectedYear)
 
+  const countryManagement = new CountryManagement()
   const map = new WorldHeatMap(
     filteredValues,
     WORLD_MAP_JSON,
     'ISO_Country',
-    'Country_Name'
+    'Country_Name',
+    countryManagement
   )
 
   updateEvents(map)
