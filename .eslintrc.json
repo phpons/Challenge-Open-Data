@@ -12,11 +12,25 @@
   "rules": {
   },
   "globals": {
+    // Global variables
     "d3": true,
+    "selectedYear": true,
+    "selectedIndicator": true,
     "CSV_DATA": true,
+    "CSV_HEADERS": true,
+    "CSV_VALUES": true,
     "WORLD_MAP_JSON": true,
+    // Global classes
+    "WorldHeatMap": true,
+    // Global functions
+    // country-selection-management
     "updateSelectedCountries": true,
+    // notification
     "displayNotification": true,
-    "removeNotificationElement": true
+    "removeNotificationElement": true,
+    // utils
+    "parseCSV": true,
+    // indicators
+    "initIndicators": true
   }
 }

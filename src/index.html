@@ -14,7 +14,7 @@
   <nav class="navbar is-light is-spaced">
     <div class="navbar-brand">
       <div class="navbar-item">
-        <img src="img/logo_ensimag_150.png" alt="logo_ensimag" id="logo_ensimag">
+        <img src="img/logo_ensimag_150.png" alt="Logo d'ENSIMAG" id="logo-ensimag">
       </div>
     </div>
 
@@ -27,11 +27,11 @@
 
       <div class="navbar-end">
         <div class="navbar-item">
-          <a class="navbar-item is-active" id="nav_visu" onclick="switchPage(this.id)">
+          <a class="navbar-item is-active" id="nav-visu" onclick="switchPage(this.id)">
             Visualisation des données
           </a>
 
-          <a class="navbar-item" id="nav_doc" onclick="switchPage(this.id)">
+          <a class="navbar-item" id="nav-doc" onclick="switchPage(this.id)">
             Documentation
           </a>
         </div>
@@ -44,8 +44,12 @@
 
     <!-- Visualisation -->
     <div id="visualisation" class="is-justify-content-center">
-      <button type="button" id="reset-zoom-button">Reset zoom</button>
-      <select name="indicators" id="indicators-select"></select>
+      <div class="mb-3">
+        <button id="reset-zoom-button" type="button" class="button">Réinitialiser le zoom</button>
+        <div class="select">
+          <select id="indicators-select" class="select"></select>
+        </div>
+      </div>
       <div id="map"></div>
       <div id="selected-countries" class="is-justify-content-center field is-grouped is-grouped-multiline"></div>
     </div>
@@ -93,11 +97,10 @@
       </p>
       <ul>
         <li>des émissions de CO₂</li>
-        <!-- TODO: Décommenter les indicateurs pour chaque implémentation -->
-        <!-- <li>de l’<a href="https://www.insee.fr/fr/metadonnees/definition/c1551" target="_blank">indice de GINI</a> estimé par World Bank</li> -->
-        <!-- <li>du PIB par pays</li> -->
-        <!-- <li>du taux de chômage</li> -->
-        <!-- <li>de la part de consommation utilisant les énergies renouvelables</li> -->
+        <li>de l’<a href="https://www.insee.fr/fr/metadonnees/definition/c1551" target="_blank">indice de GINI</a> estimé par World Bank</li>
+        <li>du PIB par pays</li>
+        <li>du taux de chômage</li>
+        <li>de la part de consommation utilisant les énergies renouvelables</li>
       </ul>
       <p>
         Nous avons spécifiquement choisi ces indicateurs, car ils ont tous un lien avec le
@@ -110,7 +113,7 @@
       <h1 class="title">Traitements opérés</h1>
       <p>
         Pour des questions de <strong>pérennité</strong>, nous avons choisi d'avoir les données disponibles
-        <a href="./index.csv" target="_blank">directement sur notre site</a>. Nous avons choisi le format
+        <a href="./js/data.js" target="_blank">directement sur notre site</a>. Nous avons choisi le format
         <strong>CSV</strong> pour répondre aux <strong>contraintes de taille</strong> de notre site. En effet, celui-ci
         doit faire <strong>moins de 10Mo</strong>.
       </p>
@@ -168,8 +171,7 @@
       <ul>
         <li>un fichier <code>index.html</code> qui est l'entrée de notre page Web</li>
         <li>un dossier <code>js</code> qui contient tous les fichiers Javascript</li>
-        <!-- TODO: Décommenter si on utilise un fichier css -->
-        <!-- <li>un dossier <code>css</code> qui contient tous les fichiers CSS</li> -->
+        <li>un dossier <code>css</code> qui contient tous les fichiers CSS</li>
       </ul>
 
       <hr />
@@ -212,11 +214,15 @@
   <!-- Notification -->
   <div id="notification"></div>
 
-  <!-- Scripts -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Data -->
   <script src="js/data.js"></script>
   <script src="js/world-countries-no-antartica.js"></script>
+
+  <!-- Scripts -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="js/country-selection-management.js"></script>
+  <script src="js/indicators.js"></script>
+  <script src="js/map.js"></script>
   <script src="js/notifications.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/index.js"></script>

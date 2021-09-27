@@ -10,7 +10,8 @@ const BULMA_COLORS = {
 }
 const NB_COLORS = Object.keys(BULMA_COLORS).length
 
-const ERROR_MESSAGE = `Vous ne pouvez sélectionner que ${NB_COLORS} pays au maximum.\nSi vous souhaitez désélectionner un pays cliquez à nouveau dessus.`
+const ERROR_MESSAGE_NB_COUNTRY = `Vous ne pouvez sélectionner que ${NB_COLORS} pays au maximum.\nSi vous souhaitez désélectionner un pays cliquez à nouveau dessus.`
+const ERROR_MESSAGE_NULL_VALUE = 'Vous ne pouvez pas sélectionner un pays dont les données ne sont pas connues'
 
 const bulmaClassesUsed = []
 
@@ -35,8 +36,6 @@ function removeControlElement (countryId) {
 }
 
 function removeSelectedCountry (countryPath) {
-  removeNotificationElement()
-
   const bulmaClass = countryPath.getAttribute('bulma-class')
 
   removeCountryPathStyle(countryPath)
@@ -99,7 +98,13 @@ function createControlElement () {
 
 function addSelectedCountry (countryPath) {
   if (selectedCountries.length >= NB_COLORS) {
-    displayNotification(ERROR_MESSAGE, 'is-info')
+    displayNotification(ERROR_MESSAGE_NB_COUNTRY, 'is-info')
+    return
+  }
+
+  const countryValue = CSV_VALUES.find(value => value.ISO_Country === countryPath.id && value.Year === selectedYear)
+  if (!countryValue || countryValue[selectedIndicator] === '') {
+    displayNotification(ERROR_MESSAGE_NULL_VALUE, 'is-warning')
     return
   }
 
@@ -115,6 +120,8 @@ function addSelectedCountry (countryPath) {
 
 // eslint-disable-next-line no-unused-vars
 function updateSelectedCountries (event) {
+  removeNotificationElement()
+
   const countryPath = event.target
   const index = selectedCountries.indexOf(countryPath.id)
   countryPath.classList.toggle('selected')
