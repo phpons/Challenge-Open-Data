@@ -13,60 +13,19 @@ const NB_COLORS = Object.keys(BULMA_COLORS).length
 const ERROR_MESSAGE_NB_COUNTRY = `Vous ne pouvez sélectionner que ${NB_COLORS} pays au maximum.\nSi vous souhaitez désélectionner un pays cliquez à nouveau dessus.`
 const ERROR_MESSAGE_NULL_VALUE = 'Vous ne pouvez pas sélectionner un pays dont les données ne sont pas connues'
 
-const bulmaClassesUsed = []
-
-const selectedCountries = []
-
-function getNextColor () {
-  for (const bulmaClass of Object.keys(BULMA_COLORS)) {
-    if (!bulmaClassesUsed.includes(bulmaClass)) return bulmaClass
-  }
-}
-
-function removeCountryPathStyle (countryPath) {
-  countryPath.style.removeProperty('stroke')
-  countryPath.style.removeProperty('stroke-width')
-  countryPath.removeAttribute('bulma-class')
-}
-
-function removeControlElement (countryId) {
-  const countryElement = document.getElementById(`${countryId}-tag`)
-  const controlElement = countryElement.parentNode
-  controlElement.parentNode.removeChild(controlElement)
-}
-
-function removeSelectedCountry (countryPath) {
-  const bulmaClass = countryPath.getAttribute('bulma-class')
-
-  removeCountryPathStyle(countryPath)
-  removeControlElement(countryPath.id)
-
-  const indexColor = bulmaClassesUsed.indexOf(bulmaClass)
-  bulmaClassesUsed.splice(indexColor, 1)
-
-  const indexCountry = selectedCountries.indexOf(countryPath.id)
-  selectedCountries.splice(indexCountry, 1)
+function countryIsValid (countryPath) {
+  const countryValue = CSV_VALUES.find(value => value.ISO_Country === countryPath.id && value.Year === selectedYear)
+  return countryValue && countryValue[selectedIndicator] !== ''
 }
 
 function addCountryPathStyle (countryPath, bulmaClass) {
   countryPath.style.stroke = BULMA_COLORS[bulmaClass]
   countryPath.style.strokeWidth = '3px'
-  countryPath.setAttribute('bulma-class', bulmaClass)
 }
 
-function addControlElement (countryPath, bulmaClass) {
-  const countryNameElement = createCountryNameElement(countryPath.getAttribute('name'), bulmaClass)
-  const deleteElement = createDeleteElement(countryPath)
-  const countryElement = createCountryElement(countryPath.id)
-  const controlElement = createControlElement()
-
-  countryElement.appendChild(countryNameElement)
-  countryElement.appendChild(deleteElement)
-
-  controlElement.appendChild(countryElement)
-
-  const selectedCountriesElement = document.getElementById('selected-countries')
-  selectedCountriesElement.appendChild(controlElement)
+function removeCountryPathStyle (countryPath) {
+  countryPath.style.removeProperty('stroke')
+  countryPath.style.removeProperty('stroke-width')
 }
 
 function createCountryNameElement (countryName, bulmaClass) {
@@ -76,10 +35,10 @@ function createCountryNameElement (countryName, bulmaClass) {
   return countryNameElement
 }
 
-function createDeleteElement (countryPath) {
-  const deleteElement = document.createElement('button')
+function createDeleteElement (countryPath, countryManagement) {
+  const deleteElement = document.createElement('a')
   deleteElement.classList.add('tag', 'is-delete')
-  deleteElement.addEventListener('click', () => removeSelectedCountry(countryPath))
+  deleteElement.addEventListener('click', () => countryManagement.removeSelectedCountry(countryPath))
   return deleteElement
 }
 
@@ -96,38 +55,75 @@ function createControlElement () {
   return controlElement
 }
 
-function addSelectedCountry (countryPath) {
-  if (selectedCountries.length >= NB_COLORS) {
-    displayNotification(ERROR_MESSAGE_NB_COUNTRY, 'is-info')
-    return
-  }
+function addControlElement (countryPath, countryManagement, bulmaClass) {
+  const countryNameElement = createCountryNameElement(countryPath.getAttribute('name'), bulmaClass)
+  const deleteElement = createDeleteElement(countryPath, countryManagement)
+  const countryElement = createCountryElement(countryPath.id)
+  const controlElement = createControlElement()
 
-  const countryValue = CSV_VALUES.find(value => value.ISO_Country === countryPath.id && value.Year === selectedYear)
-  if (!countryValue || countryValue[selectedIndicator] === '') {
-    displayNotification(ERROR_MESSAGE_NULL_VALUE, 'is-warning')
-    return
-  }
+  countryElement.appendChild(countryNameElement)
+  countryElement.appendChild(deleteElement)
 
-  const bulmaClass = getNextColor()
+  controlElement.appendChild(countryElement)
 
-  addCountryPathStyle(countryPath, bulmaClass)
-  addControlElement(countryPath, bulmaClass)
+  const selectedCountriesElement = document.getElementById('selected-countries')
+  selectedCountriesElement.appendChild(controlElement)
+}
 
-  bulmaClassesUsed.push(bulmaClass)
-
-  selectedCountries.push(countryPath.id)
+function removeControlElement (countryId) {
+  const countryElement = document.getElementById(`${countryId}-tag`)
+  const controlElement = countryElement.parentNode
+  controlElement.parentNode.removeChild(controlElement)
 }
 
 // eslint-disable-next-line no-unused-vars
-function updateSelectedCountries (event) {
-  removeNotificationElement()
+class CountryManagement {
+  constructor () {
+    this.selectedCountries = {}
+  }
 
-  const countryPath = event.target
-  const index = selectedCountries.indexOf(countryPath.id)
-  countryPath.classList.toggle('selected')
-  if (index !== -1) {
-    removeSelectedCountry(countryPath)
-  } else {
-    addSelectedCountry(countryPath)
+  getNextColor () {
+    const bulmaClassesUsed = Object.values(this.selectedCountries)
+    for (const bulmaClass of Object.keys(BULMA_COLORS)) {
+      if (!bulmaClassesUsed.includes(bulmaClass)) return bulmaClass
+    }
+  }
+
+  removeSelectedCountry (countryPath) {
+    removeCountryPathStyle(countryPath)
+    removeControlElement(countryPath.id)
+
+    delete this.selectedCountries[countryPath.id]
+  }
+
+  addSelectedCountry (countryPath) {
+    if (Object.keys(this.selectedCountries).length >= NB_COLORS) {
+      displayNotification(ERROR_MESSAGE_NB_COUNTRY, 'is-info')
+      return
+    }
+
+    if (!countryIsValid(countryPath)) {
+      displayNotification(ERROR_MESSAGE_NULL_VALUE, 'is-warning')
+      return
+    }
+
+    const bulmaClass = this.getNextColor()
+    this.selectedCountries[countryPath.id] = bulmaClass
+
+    addCountryPathStyle(countryPath, bulmaClass)
+    addControlElement(countryPath, this, bulmaClass)
+  }
+
+  updateSelectedCountries (event) {
+    removeNotificationElement()
+
+    const countryPath = event.target
+    countryPath.classList.toggle('selected')
+
+    if (Object.keys(this.selectedCountries).includes(countryPath.id)) {
+      this.removeSelectedCountry(countryPath)
+    } else {
+      this.addSelectedCountry(countryPath)
+    }
   }
 }

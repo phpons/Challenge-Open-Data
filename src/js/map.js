@@ -52,7 +52,8 @@ class WorldHeatMap {
     csvDatas,
     geojson,
     countryCodeColumn,
-    countryNameColumn
+    countryNameColumn,
+    countryManagement
   ) {
     this.width = WIDTH
     this.height = HEIGHT
@@ -62,6 +63,8 @@ class WorldHeatMap {
     this.geojson = geojson
     this.countryCodeColumn = countryCodeColumn
     this.countryNameColumn = countryNameColumn
+
+    this.countryManagement = countryManagement
 
     this.updateMinMaxQuantile()
 
@@ -309,7 +312,7 @@ class WorldHeatMap {
       .append('path')
       .attr('id', (currentCountry) => currentCountry.id)
       .attr('name', (currentCountry) => currentCountry.properties.name)
-      .on('click', updateSelectedCountries)
+      .on('click', (evt) => this.countryManagement.updateSelectedCountries(evt))
       .attr('class', 'heatmap-country-default')
   }
 

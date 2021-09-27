@@ -22,9 +22,8 @@
     "WORLD_MAP_JSON": true,
     // Global classes
     "WorldHeatMap": true,
+    "CountryManagement": true,
     // Global functions
-    // country-selection-management
-    "updateSelectedCountries": true,
     // notification
     "displayNotification": true,
     "removeNotificationElement": true,
