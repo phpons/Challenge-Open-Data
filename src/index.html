@@ -73,10 +73,9 @@
 
       <h1 class="title">Jeux de données</h1>
       <p>
-        Nos données sont servies par l’API de <a href=" https://www.worldbank.org" target="_blank">World Bank</a>.
+        Nos données sont servies par <a href=" https://www.worldbank.org" target="_blank">World Bank</a>.
         Nous utilisons notamment les données concernant la <strong>pauvreté</strong>, les <strong>inégalités</strong> et
-        l’<strong>environnement</strong>. Une description de leur API est disponible
-        <a href="https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information" target="_blank">ici</a>.
+        l’<strong>environnement</strong>.
       </p>
       <div class="subtitle">Données libres</div>
       <p>
@@ -87,12 +86,6 @@
           You may extract, download, and make copies of the data contained in the Datasets, and you may share that data
           with third parties according to these terms of use.
         </q>
-        Malheureusement, nous n’avons pas pu vérifier les conditions d’utilisation de l’API puisque le
-        <a href="http://www.worldbank.org/terms" target="_blank">lien mentionné</a> dans leur
-        <strong>documentation est invalide</strong>. Mais l’API étant utilisée par
-        <a href="http://lig-tdcge.imag.fr/~sylvain/opendata/2020-2021/allalio-elmourim-elmouraa-foulont-gaisnea/index.html" target="_blank">
-        un groupe précédent</a> nous en avons déduit que <strong>son utilisation était autorisée</strong> dans le
-        cadre de ce projet.
       </p>
       <div class="subtitle">Indicateurs et données utilisés</div>
       <p>
@@ -103,7 +96,8 @@
       </p>
       <ul>
         <li>des émissions de CO₂</li>
-        <li>de l’<a href="https://www.insee.fr/fr/metadonnees/definition/c1551" target="_blank">indice de GINI</a> estimé par World Bank</li>
+        <li>de l’<a href="https://www.insee.fr/fr/metadonnees/definition/c1551" target="_blank">indice de GINI</a>
+          estimé par World Bank</li>
         <li>du PIB par pays</li>
         <li>du taux de chômage</li>
         <li>de la part de consommation utilisant les énergies renouvelables</li>
@@ -134,10 +128,11 @@
         Afin de répondre aux contraintes de taille, nous avons décidé d'agréger toutes les données dans un
         <strong>unique fichier CSV</strong> afin d'éviter le dédoublement d'information. De plus, nous avons aussi
         réduit le nombre de données en limitant les dates utilisées. Les données disponibles sur notre site datent de
-        <strong>2010 au plus tôt</strong>. Ce dernier choix, nous permet aussi de nettoyer nos données puisque qu'avant
-        2010, les informations ne sont pas toujours présentes pour tous les pays. Pour réaliser cette tâche, nous avons
-        écrit un script <a href="https://www.python.org/" target="_blank">Python</a> utilisant la librairie
-        <a href="https://pandas.pydata.org/" target="_blank">Pandas</a>.
+        <strong>1996 au plus tôt</strong>. Ce dernier choix, nous permet aussi de nettoyer nos données puisque qu'avant
+        1996, les informations ne sont pas toujours présentes pour tous les pays. Pour réaliser cette tâche, nous avons
+        écrit un script <a href="https://www.python.org/" target="_blank">Python</a> utilisant les librairies
+        <a href="https://pandas.pydata.org/" target="_blank">Pandas</a> et
+        <a href="https://pypi.org/project/pycountry/" target="_blank">pycountry</a>.
       </p>
 
       <hr />
@@ -165,7 +160,8 @@
       <p>
         Le schéma ci-dessous résume le traitement des données qui a été fait et les choix technologiques :
       </p>
-      <img class="is-flex is-justify-content-center" src="TODO" alt="Résumé des traitements des données et des choix technologiques" />
+      <img class="is-flex is-justify-content-center" src="TODO"
+        alt="Résumé des traitements des données et des choix technologiques" />
 
       <hr />
 
@@ -195,7 +191,8 @@
         </q>
       </p>
       <p>Le résultat de cette analyse sur notre page Web est le suivant :</p>
-      <img class="is-flex is-justify-content-center" src="TODO" alt="Résultat de l'analyse de notre page Web par GreenIT Analysis" />
+      <img class="is-flex is-justify-content-center" src="TODO"
+        alt="Résultat de l'analyse de notre page Web par GreenIT Analysis" />
       <div class="subtitle">Standards W3C</div>
       <p>
         Nous avons tenu à ce que notre page Web corresponde aux
