@@ -4,6 +4,15 @@
 const { CSV_VALUES, CSV_HEADERS } = parseCSV(CSV_DATA)
 
 function updateEvents (map) {
+  // Navbar
+  const navbarBurger = document.getElementById('navbar-burger')
+  navbarBurger.addEventListener('click', (evt) => {
+    const target = navbarBurger.dataset.target
+    document.getElementById(target).classList.toggle('is-active')
+    navbarBurger.classList.toggle('is-active')
+  })
+
+  // Indicators
   document
     .getElementById('indicators-select')
     .addEventListener('change', (evt) => {
@@ -11,6 +20,7 @@ function updateEvents (map) {
       map.updateDisplay()
     })
 
+  // Map
   window.addEventListener('resize', map.resize.bind(map))
   document
     .getElementById('reset-zoom-button')
