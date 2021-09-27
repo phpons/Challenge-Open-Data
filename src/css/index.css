@@ -87,3 +87,7 @@ div.tooltip {
 #tooltip-score {
   font-weight: bold;
 }
+
+#indicator-year {
+  width: 100%;
+}

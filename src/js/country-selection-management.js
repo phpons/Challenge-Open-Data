@@ -14,8 +14,8 @@ const ERROR_MESSAGE_NB_COUNTRY = `Vous ne pouvez sélectionner que ${NB_COLORS} 
 const ERROR_MESSAGE_NULL_VALUE = 'Vous ne pouvez pas sélectionner un pays dont les données ne sont pas connues'
 
 function countryIsValid (countryPath) {
-  const countryValue = CSV_VALUES.find(value => value.ISO_Country === countryPath.id && value.Year === selectedYear)
-  return countryValue && countryValue[selectedIndicator] !== ''
+  const countryValues = CSV_VALUES.filter(value => value.ISO_Country === countryPath.id && value[selectedIndicator])
+  return countryValues.length
 }
 
 function addCountryPathStyle (countryPath, bulmaClass) {

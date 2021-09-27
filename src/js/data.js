@@ -1,7 +1,7 @@
 'use strict'
 
 // eslint-disable-next-line no-unused-vars
-const CSV_DATA = `Country_Name,Year,Emission de CO2 (tonnes par habitant),PIB par habitant ($ Américain actuel),Coefficient de Gini (estimation de World Bank),Population,Consommation d'énergie renouvelable (% de la consommation totale d'énergie),Chômage,ISO_Country
+const CSV_DATA = `Country_Name,Year,Emission de CO2 (tonnes par habitant),PIB par habitant ($ Américain actuel),Coefficient de Gini (estimation de World Bank),Population,Consommation d'énergie renouvelable (% de la consommation totale d'énergie),Chômage (% de la population active),ISO_Country
 Afghanistan,1996,0.06258803431,,,18853444,37.9457475,11.65,AF
 Afghanistan,1997,0.05682661775,,,19357126,41.43260087,11.64,AF
 Afghanistan,1998,0.05319749901,,,19737770,44.09433685,11.64,AF

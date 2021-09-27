@@ -30,6 +30,10 @@
     // utils
     "parseCSV": true,
     // indicators
-    "initIndicators": true
+    "initIndicators": true,
+    // year-range
+    "updateYearRange": true,
+    "updateYearDisplay": true,
+    "initYearRange": true
   }
 }

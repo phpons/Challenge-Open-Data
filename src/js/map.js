@@ -1,21 +1,18 @@
 'use strict'
 
-const WIDTH = document.getElementById('visualisation').offsetWidth * 0.95
-const HEIGHT = 500
+const HEIGHT_RATIO = (1.5 / 4)
+const WIDTH = document.getElementById('visualisation').offsetWidth
+const HEIGHT = WIDTH * HEIGHT_RATIO
 const COLORS = [
-  '#9cc8dd',
+  '#b0d3e3',
   '#88bdd6',
-  '#75b2cf',
   '#61a7c8',
-  '#4d9cc1',
-  '#3a92bb'
+  '#3a92bb',
+  '#2e7495',
+  '#225770'
 ]
 const COMPLEMENTARY_COLOR = '#bb633a'
 const LEGEND_CELL_SIZE = 20
-
-// TODO: temporary cause year selection is in another issue
-// eslint-disable-next-line no-unused-vars
-const selectedYear = '2000'
 
 function shortCountryName (country) {
   return country.replace('Démocratique', 'Dem.').replace('République', 'Rep.')
@@ -53,6 +50,9 @@ class WorldHeatMap {
     geojson,
     countryCodeColumn,
     countryNameColumn,
+    valuesColumn,
+    yearColumn,
+    year,
     countryManagement
   ) {
     this.width = WIDTH
@@ -63,6 +63,9 @@ class WorldHeatMap {
     this.geojson = geojson
     this.countryCodeColumn = countryCodeColumn
     this.countryNameColumn = countryNameColumn
+    this.valuesColumn = valuesColumn
+    this.yearColumn = yearColumn
+    this.currentYear = year
 
     this.countryManagement = countryManagement
 
@@ -81,7 +84,7 @@ class WorldHeatMap {
   updateMinMaxQuantile () {
     const { min, max, quantile } = getStatsFromColumn(
       this.csvDatas,
-      selectedIndicator
+      this.valuesColumn
     )
     this.minCsvValue = min
     this.maxCsvValue = max
@@ -132,12 +135,11 @@ class WorldHeatMap {
       .attr('class', 'heatmap-country-default')
     legend // no values text
       .append('svg:text')
-      .attr('x', offsetX + 15)
-      .attr('y', this.height - LEGEND_CELL_SIZE - offsetY - 10)
+      .attr('x', offsetX - 5)
+      .attr('y', this.height - LEGEND_CELL_SIZE - offsetY - 7)
       .attr('text', 'No values')
       .attr('class', 'legend-text')
-      .attr('text-anchor', 'middle')
-      .text('No values')
+      .text('Pas de valeur')
 
     legend
       .append('polyline')
@@ -182,7 +184,11 @@ class WorldHeatMap {
   }
 
   get csvDatas () {
-    return this.rawCsvDatas.filter((value) => this.isValidValue(value))
+    return this.rawCsvDatas.filter(
+      (value) =>
+        this.isValidValue(value) &&
+        +value[this.yearColumn] === +this.currentYear
+    )
   }
 
   set csvDatas (datas) {
@@ -324,13 +330,13 @@ class WorldHeatMap {
       .text(shortCountryName(value[(this, this.countryNameColumn)]))
     this.tooltip
       .select('#tooltip-score')
-      .text(`${this.formatValue(+value[selectedIndicator])}`)
+      .text(`${this.formatValue(+value[this.valuesColumn])}`)
     this.legend
       .select('#cursor')
       .attr(
         'transform',
         `translate(${LEGEND_CELL_SIZE + 5},${
-          getColorIndex(this.scaleQuantile(+value[selectedIndicator])) *
+          getColorIndex(this.scaleQuantile(+value[this.valuesColumn])) *
           LEGEND_CELL_SIZE
         })`
       )
@@ -338,7 +344,7 @@ class WorldHeatMap {
   }
 
   onCountryMouseOut (countryPath, value) {
-    countryPath.style('fill', this.scaleQuantile(+value[selectedIndicator]))
+    countryPath.style('fill', this.scaleQuantile(+value[this.valuesColumn]))
     this.tooltip.style('display', 'none')
     this.legend.select('#cursor').style('display', 'none')
   }
@@ -349,13 +355,13 @@ class WorldHeatMap {
   }
 
   isValidValue (value) {
-    return value[selectedIndicator] !== ''
+    return value[this.valuesColumn] !== ''
   }
 
   colorCountry (countryPath, value) {
     countryPath
-      .attr('scorecolor', this.scaleQuantile(+value[selectedIndicator]))
-      .style('fill', this.scaleQuantile(+value[selectedIndicator]))
+      .attr('scorecolor', this.scaleQuantile(+value[this.valuesColumn]))
+      .style('fill', this.scaleQuantile(+value[this.valuesColumn]))
   }
 
   bindCountryEvent (countryPath, value) {
@@ -380,9 +386,9 @@ class WorldHeatMap {
   }
 
   resize (evt) {
-    this.width = document.getElementById('visualisation').offsetWidth * 0.95
-    // this.height = HEIGHT
-    this.svg.attr('width', this.width) // .attr('height', this.height)
+    this.width = document.getElementById('visualisation').offsetWidth
+    this.height = this.width * HEIGHT_RATIO
+    this.svg.attr('width', this.width).attr('height', this.height)
     this.d3Title.attr('x', this.width / 2)
     this.d3Subtitle.attr('x', this.width / 2)
     // TODO: resize legend
@@ -391,11 +397,10 @@ class WorldHeatMap {
   }
 
   estimateAxisFormat () {
-    if (selectedIndicator.includes('$')) {
+    if (this.valuesColumn.includes('$')) {
       return d3.format('$~s')
     } else if (
-      selectedIndicator.includes('%') ||
-      selectedIndicator.includes('Unemployment')
+      this.valuesColumn.includes('%')
     ) {
       return (d) => d + '%'
     } else {
@@ -406,11 +411,11 @@ class WorldHeatMap {
   formatValue (value) {
     let options = {}
     let suffix = ''
-    if (selectedIndicator.includes('$')) {
+    if (this.valuesColumn.includes('$')) {
       options = { style: 'currency', currency: 'USD' }
     } else if (
-      selectedIndicator.includes('%') ||
-      selectedIndicator.includes('Unemployment')
+      this.valuesColumn.includes('%') ||
+      this.valuesColumn.includes('Unemployment')
     ) {
       suffix = ' %'
     }

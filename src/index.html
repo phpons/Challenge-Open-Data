@@ -58,6 +58,9 @@
       </div>
       <div id="map"></div>
       <div id="selected-countries" class="is-justify-content-center field is-grouped is-grouped-multiline"></div>
+      <input type="range" id="indicator-year" class="range-year-indicator" list="indicator-year-list">
+      <datalist id="indicator-year-list" class="datalist-year-indicator"></datalist>
+      <p id="current-year"></p>
     </div>
 
     <!-- Documentation -->
@@ -228,6 +231,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="js/country-selection-management.js"></script>
   <script src="js/indicators.js"></script>
+  <script src="js/year-range.js"></script>
   <script src="js/map.js"></script>
   <script src="js/notifications.js"></script>
   <script src="js/utils.js"></script>

@@ -15,6 +15,7 @@ function switchPage (id) {
     documentation.classList.toggle('is-hidden')
     navVisu.classList.toggle('is-active')
     navDoc.classList.toggle('is-active')
+    window.dispatchEvent(new Event('resize'))
   }
 }
 
