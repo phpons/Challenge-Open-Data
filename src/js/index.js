@@ -17,7 +17,18 @@ function updateEvents (map) {
     .getElementById('indicators-select')
     .addEventListener('change', (evt) => {
       selectedIndicator = evt.target.value
+      map.valuesColumn = selectedIndicator
       map.updateDisplay()
+      updateYearRange(selectedIndicator)
+    })
+
+  document
+    .getElementById('indicator-year')
+    .addEventListener('input', (evt) => {
+      selectedYear = evt.target.value
+      map.currentYear = selectedYear
+      map.updateDisplay()
+      updateYearDisplay()
     })
 
   // Map
@@ -29,15 +40,16 @@ function updateEvents (map) {
 
 function main () {
   initIndicators()
-
-  const filteredValues = CSV_VALUES.filter((val) => val.Year === selectedYear)
+  initYearRange(selectedIndicator)
 
   const countryManagement = new CountryManagement()
   const map = new WorldHeatMap(
-    filteredValues,
+    CSV_VALUES,
     WORLD_MAP_JSON,
     'ISO_Country',
     'Country_Name',
+    selectedIndicator,
+    'Year', selectedYear,
     countryManagement
   )
 
