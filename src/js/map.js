@@ -1,8 +1,7 @@
 'use strict'
 
-const HEIGHT_RATIO = (1.5 / 4)
 const WIDTH = document.getElementById('visualisation').offsetWidth
-const HEIGHT = WIDTH * HEIGHT_RATIO
+const HEIGHT = adjustHeight(WIDTH)
 const COLORS = [
   '#b0d3e3',
   '#88bdd6',
@@ -12,10 +11,18 @@ const COLORS = [
   '#225770'
 ]
 const COMPLEMENTARY_COLOR = '#bb633a'
-const LEGEND_CELL_SIZE = 20
 
 function shortCountryName (country) {
   return country.replace('Démocratique', 'Dem.').replace('République', 'Rep.')
+}
+
+function adjustHeight (width) {
+  const height = document.body.offsetHeight * 0.6
+  if (height > width) {
+    return width
+  } else {
+    return height
+  }
 }
 
 function getColorIndex (color) {
@@ -118,37 +125,23 @@ class WorldHeatMap {
       .data(d3.range(COLORS.length))
       .enter()
       .append('svg:rect')
-      .attr('height', LEGEND_CELL_SIZE + 'px')
-      .attr('width', LEGEND_CELL_SIZE + 'px')
       .attr('x', 5)
-      .attr('y', (currIdx) => currIdx * LEGEND_CELL_SIZE)
+      .attr('class', 'legend-scale-square')
       .style('fill', (currIdx) => COLORS[currIdx])
       .on('mouseover', this.onLegendMouseOver.bind(this))
       .on('mouseout', this.onLegendMouseOut.bind(this))
 
     legend // no values rect
       .append('svg:rect')
-      .attr('height', LEGEND_CELL_SIZE + 'px')
-      .attr('width', LEGEND_CELL_SIZE + 'px')
       .attr('x', 5)
-      .attr('y', this.height - LEGEND_CELL_SIZE * 2 - offsetY)
       .attr('class', 'heatmap-country-default')
     legend // no values text
       .append('svg:text')
-      .attr('x', offsetX - 5)
-      .attr('y', this.height - LEGEND_CELL_SIZE - offsetY - 7)
-      .attr('text', 'No values')
       .attr('class', 'legend-text')
       .text('Pas de valeur')
 
     legend
       .append('polyline')
-      .attr(
-        'points',
-        `${LEGEND_CELL_SIZE},0 ${LEGEND_CELL_SIZE},${LEGEND_CELL_SIZE} ${
-          LEGEND_CELL_SIZE * 0.2
-        },${LEGEND_CELL_SIZE / 2}`
-      )
       .attr('id', 'cursor')
       .style('display', 'none')
       .style('fill', COMPLEMENTARY_COLOR)
@@ -156,7 +149,6 @@ class WorldHeatMap {
     this.legendScale = d3
       .scaleLinear()
       .domain([this.minCsvValue, this.maxCsvValue])
-      .range([0, COLORS.length * LEGEND_CELL_SIZE])
 
     legend
       .append('g')
@@ -164,6 +156,8 @@ class WorldHeatMap {
       .call(d3.axisLeft(this.legendScale))
 
     this.legend = legend
+
+    this.resizeLegend()
   }
 
   set title (text) {
@@ -195,6 +189,10 @@ class WorldHeatMap {
     this.rawCsvDatas = datas
   }
 
+  get legendCellSize () {
+    return this.height * 0.04
+  }
+
   initTitleAndSubtitle () {
     this.d3Title = this.svg
       .append('text')
@@ -219,7 +217,9 @@ class WorldHeatMap {
       .select('#cursor')
       .attr(
         'transform',
-        `translate(${LEGEND_CELL_SIZE + 5}, ${rangeIndex * LEGEND_CELL_SIZE})`
+        `translate(${this.legendCellSize + 5}, ${
+          rangeIndex * this.legendCellSize
+        })`
       )
       .style('display', null)
     d3.selectAll(`path[scorecolor='${COLORS[rangeIndex]}']`).style(
@@ -335,9 +335,9 @@ class WorldHeatMap {
       .select('#cursor')
       .attr(
         'transform',
-        `translate(${LEGEND_CELL_SIZE + 5},${
+        `translate(${this.legendCellSize + 5},${
           getColorIndex(this.scaleQuantile(+value[this.valuesColumn])) *
-          LEGEND_CELL_SIZE
+          this.legendCellSize
         })`
       )
       .style('display', null)
@@ -385,13 +385,44 @@ class WorldHeatMap {
     this.svg.selectAll('#svg-countries path').attr('d', this.path)
   }
 
+  resizeLegend () {
+    const offsetX = this.width * 0.075
+    const offsetY = this.height * 0.05
+    this.legend.attr('transform', `translate(${offsetX}, ${offsetY})`)
+    this.legend
+      .selectAll('.legend-scale-square')
+      .attr('height', this.legendCellSize + 'px')
+      .attr('width', this.legendCellSize + 'px')
+      .attr('y', (currIdx) => currIdx * this.legendCellSize)
+    this.legend
+      .select('.heatmap-country-default')
+      .attr('height', this.legendCellSize + 'px')
+      .attr('width', this.legendCellSize + 'px')
+      .attr('y', this.height - this.height * 0.15)
+    this.legend
+      .select('#cursor')
+      .attr(
+        'points',
+        `${this.legendCellSize},0 ${this.legendCellSize},${
+          this.legendCellSize
+        } ${this.legendCellSize * 0.2},${this.legendCellSize / 2}`
+      )
+    this.legend
+      .select('.legend-text')
+      .attr('x', this.legendCellSize + 10)
+      .attr('text-anchor', 'start')
+      .attr('y', this.height - this.height * 0.12)
+    this.legendScale.range([0, COLORS.length * this.legendCellSize])
+    this.legend.call(d3.axisLeft(this.legendScale))
+  }
+
   resize (evt) {
     this.width = document.getElementById('visualisation').offsetWidth
-    this.height = this.width * HEIGHT_RATIO
+    this.height = adjustHeight(this.width)
     this.svg.attr('width', this.width).attr('height', this.height)
     this.d3Title.attr('x', this.width / 2)
     this.d3Subtitle.attr('x', this.width / 2)
-    // TODO: resize legend
+    this.resizeLegend()
     this.computeProjection()
     this.updateDisplay()
   }
@@ -399,9 +430,7 @@ class WorldHeatMap {
   estimateAxisFormat () {
     if (this.valuesColumn.includes('$')) {
       return d3.format('$~s')
-    } else if (
-      this.valuesColumn.includes('%')
-    ) {
+    } else if (this.valuesColumn.includes('%')) {
       return (d) => d + '%'
     } else {
       return d3.format('~s')
