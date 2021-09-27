@@ -21,6 +21,16 @@ Data from [World Bank](https://www.worldbank.org)
 
 `http://api.worldbank.org/v2/country/<country_code>/indicators/<code>?format=json&date=<date>`
 
+## Data import
+
+The data is directly in `/src/js/data.js`. But if you want to regenerate them you have to launch the [Python](https://www.python.org) script with the commands:
+
+```
+cd data_import
+pip install -r requirements.txt
+python index.py
+```
+
 ## Gitlab CI
 
 The gitlab CI checks the HTML, CSS and Javascript files.
