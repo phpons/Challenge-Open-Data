@@ -371,6 +371,7 @@ class WorldHeatMap {
       this.colorCountry(countryPath, value)
       this.bindCountryEvent(countryPath, value)
     })
+    this.countryManagement.displaySelectedCountries()
   }
 
   draw () {

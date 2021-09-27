@@ -126,4 +126,15 @@ class CountryManagement {
       this.addSelectedCountry(countryPath)
     }
   }
+
+  displaySelectedCountries () {
+    Object.keys(this.selectedCountries).forEach(key => {
+      const countryPath = document.getElementById(key)
+      if (countryIsValid(countryPath)) {
+        addCountryPathStyle(countryPath, this.selectedCountries[key])
+      } else {
+        this.removeSelectedCountry(countryPath)
+      }
+    })
+  }
 }
