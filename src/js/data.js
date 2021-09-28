@@ -1,7 +1,18 @@
 'use strict'
 
 // eslint-disable-next-line no-unused-vars
-const CSV_DATA = `Country_Name,Year,Emission de CO2 (tonnes par habitant),PIB par habitant ($ Américain actuel),Coefficient de Gini (estimation de World Bank),Population,Consommation d'énergie renouvelable (% de la consommation totale d'énergie),Chômage (% de la population active),ISO_Country
+const YEAR_COLUMN = 'Year'
+// eslint-disable-next-line no-unused-vars
+const COUNTRY_CODE_COLUMN = 'ISO_Country'
+// eslint-disable-next-line no-unused-vars
+const COUNTRY_NAME_COLUMN = 'Country_Name'
+// eslint-disable-next-line no-unused-vars
+const POPULATION_COLUMN = 'Population'
+// eslint-disable-next-line no-unused-vars
+const PIB_COLUMN = 'PIB par habitant ($ Américain actuel)'
+
+// eslint-disable-next-line no-unused-vars
+const CSV_DATA = `${COUNTRY_NAME_COLUMN},${YEAR_COLUMN},Emission de CO2 (tonnes par habitant),${PIB_COLUMN},Coefficient de Gini (estimation de World Bank),${POPULATION_COLUMN},Consommation d'énergie renouvelable (% de la consommation totale d'énergie),Chômage (% de la population active),${COUNTRY_CODE_COLUMN}
 Afghanistan,1996,0.06258803431,,,18853444,37.9457475,11.65,AF
 Afghanistan,1997,0.05682661775,,,19357126,41.43260087,11.64,AF
 Afghanistan,1998,0.05319749901,,,19737770,44.09433685,11.64,AF

@@ -3,7 +3,7 @@
 // eslint-disable-next-line no-unused-vars
 const { CSV_VALUES, CSV_HEADERS } = parseCSV(CSV_DATA)
 
-function updateEvents (map) {
+function updateEvents (map, chart) {
   // Navbar
   const navbarBurger = document.getElementById('navbar-burger')
   navbarBurger.addEventListener('click', (evt) => {
@@ -19,6 +19,8 @@ function updateEvents (map) {
       selectedIndicator = evt.target.value
       map.valuesColumn = selectedIndicator
       map.updateDisplay()
+      chart.selectedIndicator = selectedIndicator
+      chart.updateChart()
       updateYearRange(selectedIndicator)
     })
 
@@ -31,10 +33,17 @@ function updateEvents (map) {
     })
 
   // Map
-  window.addEventListener('resize', map.resize.bind(map))
+  window.addEventListener('resize', (evt) => {
+    map.resize()
+    chart.resize()
+  })
+
   document
     .getElementById('reset-zoom-button')
     .addEventListener('click', map.resetZoom.bind(map))
+
+  document.getElementById('map').addEventListener('click', chart.updateChart.bind(chart))
+  document.getElementById('selected-countries').addEventListener('click', chart.updateChart.bind(chart))
 }
 
 function main () {
@@ -47,16 +56,19 @@ function main () {
   const map = new WorldHeatMap(
     CSV_VALUES,
     WORLD_MAP_JSON,
-    'ISO_Country',
-    'Country_Name',
     selectedIndicator,
-    'Year',
     selectedYear,
     countryManagement,
-    ['Population', CSV_HEADERS.find((val) => val.includes('PIB'))]
+    [POPULATION_COLUMN, PIB_COLUMN]
   )
 
-  updateEvents(map)
+  const chart = new Chart(
+    CSV_VALUES,
+    selectedIndicator,
+    countryManagement
+  )
+
+  updateEvents(map, chart)
 }
 
 // Use window.onload event to launch the main function when loading process has ended
