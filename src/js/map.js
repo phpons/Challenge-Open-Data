@@ -44,9 +44,14 @@ function getValueScaleQuantile (min, max) {
   return d3.scaleQuantile().domain([min, max]).range(COLORS)
 }
 
-function getStatsFromColumn (values, column) {
+function getStatsFromColumn (values, column, bool) {
   const { min, max } = getMinMaxFromColumn(values, column)
-  const quantile = getValueScaleQuantile(min, max)
+  let quantile
+  if (bool) {
+    quantile = getValueScaleQuantile(Math.sqrt(min), Math.sqrt(max))
+  } else {
+    quantile = getValueScaleQuantile(min, max)
+  }
   return { min: min, max: max, quantile: quantile }
 }
 
@@ -60,7 +65,8 @@ class WorldHeatMap {
     valuesColumn,
     yearColumn,
     year,
-    countryManagement
+    countryManagement,
+    indicatorsWithSqrtScale
   ) {
     this.width = WIDTH
     this.height = HEIGHT
@@ -76,6 +82,8 @@ class WorldHeatMap {
 
     this.countryManagement = countryManagement
 
+    this.indicatorsWithSqrtScale = indicatorsWithSqrtScale
+
     this.updateMinMaxQuantile()
 
     this.initSvg()
@@ -85,13 +93,16 @@ class WorldHeatMap {
     this.initTooltip()
     this.initZoom()
 
+    this.updateTitle()
+
     this.draw()
   }
 
   updateMinMaxQuantile () {
     const { min, max, quantile } = getStatsFromColumn(
       this.csvDatas,
-      this.valuesColumn
+      this.valuesColumn,
+      !!this.sqrtScale // doing !! so we ensure this is a boolean
     )
     this.minCsvValue = min
     this.maxCsvValue = max
@@ -146,17 +157,13 @@ class WorldHeatMap {
       .style('display', 'none')
       .style('fill', COMPLEMENTARY_COLOR)
 
-    this.legendScale = d3
-      .scaleLinear()
-      .domain([this.minCsvValue, this.maxCsvValue])
-
     legend
       .append('g')
       .attr('class', 'axis')
-      .call(d3.axisLeft(this.legendScale))
 
     this.legend = legend
 
+    this.updateLegend()
     this.resizeLegend()
   }
 
@@ -336,7 +343,7 @@ class WorldHeatMap {
       .attr(
         'transform',
         `translate(${this.legendCellSize + 5},${
-          getColorIndex(this.scaleQuantile(+value[this.valuesColumn])) *
+          getColorIndex(this.scaleQuantile(this.getValueWithScale(value))) *
           this.legendCellSize
         })`
       )
@@ -344,9 +351,20 @@ class WorldHeatMap {
   }
 
   onCountryMouseOut (countryPath, value) {
-    countryPath.style('fill', this.scaleQuantile(+value[this.valuesColumn]))
+    countryPath.style(
+      'fill',
+      this.scaleQuantile(this.getValueWithScale(value))
+    )
     this.tooltip.style('display', 'none')
     this.legend.select('#cursor').style('display', 'none')
+  }
+
+  getValueWithScale (value) {
+    if (this.sqrtScale) {
+      return Math.sqrt(+value[this.valuesColumn])
+    } else {
+      return +value[this.valuesColumn]
+    }
   }
 
   onCountryMouseMove (evt) {
@@ -360,8 +378,8 @@ class WorldHeatMap {
 
   colorCountry (countryPath, value) {
     countryPath
-      .attr('scorecolor', this.scaleQuantile(+value[this.valuesColumn]))
-      .style('fill', this.scaleQuantile(+value[this.valuesColumn]))
+      .attr('scorecolor', this.scaleQuantile(this.getValueWithScale(value)))
+      .style('fill', this.scaleQuantile(this.getValueWithScale(value)))
   }
 
   bindCountryEvent (countryPath, value) {
@@ -413,7 +431,7 @@ class WorldHeatMap {
       .attr('text-anchor', 'start')
       .attr('y', this.height - this.height * 0.12)
     this.legendScale.range([0, COLORS.length * this.legendCellSize])
-    this.legend.call(d3.axisLeft(this.legendScale))
+    this.legend.select('.axis').call(d3.axisLeft(this.legendScale).ticks(COLORS.length))
   }
 
   resize (evt) {
@@ -442,10 +460,7 @@ class WorldHeatMap {
     let suffix = ''
     if (this.valuesColumn.includes('$')) {
       options = { style: 'currency', currency: 'USD' }
-    } else if (
-      this.valuesColumn.includes('%') ||
-      this.valuesColumn.includes('Unemployment')
-    ) {
+    } else if (this.valuesColumn.includes('%')) {
       suffix = ' %'
     }
     return new Intl.NumberFormat('fr-FR', options).format(value) + suffix
@@ -453,10 +468,17 @@ class WorldHeatMap {
 
   updateLegend () {
     const format = this.estimateAxisFormat()
-    this.legendScale.domain([this.minCsvValue, this.maxCsvValue])
-    this.legend
-      .select('.axis')
-      .call(d3.axisLeft(this.legendScale).tickFormat(format))
+    if (this.sqrtScale) {
+      this.legendScale = d3.scaleSqrt()
+    } else {
+      this.legendScale = d3.scaleLinear()
+    }
+    this.legendScale
+      .domain([this.minCsvValue, this.maxCsvValue])
+      .range([0, COLORS.length * this.legendCellSize])
+    this.legend.select('.axis').call(
+      d3.axisLeft(this.legendScale).tickFormat(format).ticks(COLORS.length)
+    )
   }
 
   resetCountries () {
@@ -470,10 +492,17 @@ class WorldHeatMap {
   }
 
   updateDisplay () {
+    this.sqrtScale = this.indicatorsWithSqrtScale.includes(this.valuesColumn)
     this.updateMinMaxQuantile()
     this.updateLegend()
+    this.updateTitle()
     this.resetCountries()
     this.draw()
+  }
+
+  updateTitle () {
+    this.title = `${this.valuesColumn} en ${this.currentYear}`
+    this.subtitle = this.sqrtScale ? 'Échelle racine carrée' : 'Échelle linéaire'
   }
 
   addEventListener (evt, func) {

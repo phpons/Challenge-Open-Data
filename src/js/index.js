@@ -50,8 +50,10 @@ function main () {
     'ISO_Country',
     'Country_Name',
     selectedIndicator,
-    'Year', selectedYear,
-    countryManagement
+    'Year',
+    selectedYear,
+    countryManagement,
+    ['Population', CSV_HEADERS.find((val) => val.includes('PIB'))]
   )
 
   updateEvents(map)
