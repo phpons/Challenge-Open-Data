@@ -11,11 +11,13 @@
   },
   "rules": {
   },
+  "ignorePatterns": ["*.min.js"],
   "globals": {
     // Global variables
     "d3": true,
     "selectedYear": true,
     "selectedIndicator": true,
+    "bulmaSlider": true,
     "CSV_DATA": true,
     "CSV_HEADERS": true,
     "CSV_VALUES": true,
@@ -33,7 +35,6 @@
     "initIndicators": true,
     // year-range
     "updateYearRange": true,
-    "updateYearDisplay": true,
     "initYearRange": true
   }
 }
