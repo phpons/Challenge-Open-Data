@@ -28,7 +28,6 @@ function updateEvents (map) {
       selectedYear = evt.target.value
       map.currentYear = selectedYear
       map.updateDisplay()
-      updateYearDisplay()
     })
 
   // Map
@@ -41,6 +40,8 @@ function updateEvents (map) {
 function main () {
   initIndicators()
   initYearRange(selectedIndicator)
+
+  bulmaSlider.attach()
 
   const countryManagement = new CountryManagement()
   const map = new WorldHeatMap(

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Challenge Open Data</title>
   <link rel="stylesheet" href="css/bulma/css/bulma.min.css">
+  <link rel="stylesheet" href="css/bulma-slider.min.css">
   <link rel="stylesheet" media="print" href="css/print.css">
   <link rel="stylesheet" media="screen" href="css/index.css">
 </head>
@@ -51,17 +52,31 @@
 
     <!-- Visualisation -->
     <div id="visualisation" class="is-justify-content-center">
-      <div class="mb-3">
-        <button id="reset-zoom-button" type="button" class="button">Réinitialiser le zoom</button>
-        <div class="select">
-          <select id="indicators-select" class="select"></select>
+      <!-- Parameters -->
+      <div class="columns is-multiline">
+        <div class="column is-narrow">
+          <button id="reset-zoom-button" type="button" class="button">Réinitialiser le zoom</button>
+        </div>
+        <div class="column">
+          <div class="select">
+            <select id="indicators-select" class="select"></select>
+          </div>
+        </div>
+        <div class="column is-flex levels">
+          <input id="indicator-year" type="range" class="slider is-info is-fullwidth is-circle has-output level-item">
+          <div class="level-item">
+            <output for="indicator-year" class="tag is-info ml-3"></output>
+          </div>
         </div>
       </div>
+
+      <!-- Map -->
       <div id="map"></div>
+
+      <!-- Selected countries -->
       <div id="selected-countries" class="is-justify-content-center field is-grouped is-grouped-multiline"></div>
-      <input type="range" id="indicator-year" class="range-year-indicator" list="indicator-year-list">
-      <datalist id="indicator-year-list" class="datalist-year-indicator"></datalist>
-      <p id="current-year"></p>
+    
+      <!-- Graphes -->
     </div>
 
     <!-- Documentation -->
@@ -230,6 +245,7 @@
 
   <!-- Scripts -->
   <script src="js/d3/dist/d3.min.js"></script>
+  <script src="js/bulma-slider.min.js"></script>
   <script src="js/country-selection-management.js"></script>
   <script src="js/indicators.js"></script>
   <script src="js/year-range.js"></script>
