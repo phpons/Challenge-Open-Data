@@ -22,9 +22,17 @@
     "CSV_HEADERS": true,
     "CSV_VALUES": true,
     "WORLD_MAP_JSON": true,
+    "WIDTH": true,
+    "BULMA_COLORS": true,
+    "YEAR_COLUMN": true,
+    "COUNTRY_CODE_COLUMN": true,
+    "COUNTRY_NAME_COLUMN": true,
+    "POPULATION_COLUMN": true,
+    "PIB_COLUMN": true,
     // Global classes
     "WorldHeatMap": true,
     "CountryManagement": true,
+    "Chart": true,
     // Global functions
     // notification
     "displayNotification": true,

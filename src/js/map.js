@@ -60,10 +60,7 @@ class WorldHeatMap {
   constructor (
     csvDatas,
     geojson,
-    countryCodeColumn,
-    countryNameColumn,
     valuesColumn,
-    yearColumn,
     year,
     countryManagement,
     indicatorsWithSqrtScale
@@ -74,10 +71,7 @@ class WorldHeatMap {
     this.rawCsvDatas = csvDatas
 
     this.geojson = geojson
-    this.countryCodeColumn = countryCodeColumn
-    this.countryNameColumn = countryNameColumn
     this.valuesColumn = valuesColumn
-    this.yearColumn = yearColumn
     this.currentYear = year
 
     this.countryManagement = countryManagement
@@ -188,7 +182,7 @@ class WorldHeatMap {
     return this.rawCsvDatas.filter(
       (value) =>
         this.isValidValue(value) &&
-        +value[this.yearColumn] === +this.currentYear
+        +value[YEAR_COLUMN] === +this.currentYear
     )
   }
 
@@ -334,7 +328,7 @@ class WorldHeatMap {
     this.tooltip.style('display', null)
     this.tooltip
       .select('#tooltip-country')
-      .text(shortCountryName(value[(this, this.countryNameColumn)]))
+      .text(shortCountryName(value[(this, COUNTRY_NAME_COLUMN)]))
     this.tooltip
       .select('#tooltip-score')
       .text(`${this.formatValue(+value[this.valuesColumn])}`)
@@ -391,7 +385,7 @@ class WorldHeatMap {
 
   colorAndBindCountries () {
     this.csvDatas.forEach((value, index) => {
-      const countryPath = d3.select(`#${value[this.countryCodeColumn]}`)
+      const countryPath = d3.select(`#${value[COUNTRY_CODE_COLUMN]}`)
       this.colorCountry(countryPath, value)
       this.bindCountryEvent(countryPath, value)
     })

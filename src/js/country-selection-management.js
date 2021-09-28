@@ -89,6 +89,14 @@ class CountryManagement {
     }
   }
 
+  getColor (countryName) {
+    return this.selectedCountries[countryName]
+  }
+
+  getSelectedCountries () {
+    return Object.keys(this.selectedCountries)
+  }
+
   removeSelectedCountry (countryPath) {
     removeCountryPathStyle(countryPath)
     removeControlElement(countryPath.id)
@@ -97,7 +105,7 @@ class CountryManagement {
   }
 
   addSelectedCountry (countryPath) {
-    if (Object.keys(this.selectedCountries).length >= NB_COLORS) {
+    if (this.getSelectedCountries().length >= NB_COLORS) {
       displayNotification(ERROR_MESSAGE_NB_COUNTRY, 'is-info')
       return
     }
@@ -120,7 +128,7 @@ class CountryManagement {
     const countryPath = event.target
     countryPath.classList.toggle('selected')
 
-    if (Object.keys(this.selectedCountries).includes(countryPath.id)) {
+    if (this.getSelectedCountries().includes(countryPath.id)) {
       this.removeSelectedCountry(countryPath)
     } else {
       this.addSelectedCountry(countryPath)
@@ -128,7 +136,7 @@ class CountryManagement {
   }
 
   displaySelectedCountries () {
-    Object.keys(this.selectedCountries).forEach(key => {
+    this.getSelectedCountries().forEach(key => {
       const countryPath = document.getElementById(key)
       if (countryIsValid(countryPath)) {
         addCountryPathStyle(countryPath, this.selectedCountries[key])

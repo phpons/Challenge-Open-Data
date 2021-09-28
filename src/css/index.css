@@ -79,9 +79,15 @@ div.tooltip {
   font-size: 16px;
 }
 
-#svg {
+#map #svg {
   border: 2px solid lightgrey;
   border-radius: 0.5rem;
+}
+
+#chart #svg {
+  text-align: center;
+  margin: auto;
+  position: relative;
 }
 
 #tooltip-score {
