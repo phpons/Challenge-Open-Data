@@ -1,5 +1,10 @@
+variables:
+  DOCKER_AUTH_CONFIG: '{ "auths": { "https://index.docker.io/v1/": { "auth": "$DOCKER_AUTH" } }}'
+
 stages:
   - test
+  - build
+  - deploy
 
 w3c-validation:
   stage: test
@@ -33,3 +38,61 @@ js-lint:
     - npm install --save-dev eslint-config-standard
   script:
     - eslint src/js/
+
+html-minify:
+  stage: build
+  image: node:latest
+  before_script:
+    - npm install -g html-minifier
+    - mkdir -p tmp
+  script:
+    - cp src/index.html tmp/index.html
+    # Remove previous scripts
+    - sed -i '/<script/d' tmp/index.html
+    # Add unique script
+    - sed -i 's/<\/body>/\t<script src="index.min.js"><\/script>\n<\/body>/' tmp/index.html
+    # Replace css files
+    - sed -i '{s/print.css/print.min.css/;s/index.css/index.min.css/}' tmp/index.html
+    - html-minifier --collapse-whitespace --remove-comments tmp/index.html --output tmp/index.min.html
+  artifacts:
+    paths:
+      - tmp/index.min.html
+
+style-minify:
+  stage: build
+  image: node:latest
+  before_script:
+    - npm install -g css-minify
+    - mkdir -p tmp/css
+  script:
+    - css-minify --dir src/css --output tmp/css
+  artifacts:
+    paths:
+      - tmp/css
+
+js-minify:
+  stage: build
+  image: node:latest
+  before_script:
+    - npm install -g google-closure-compiler
+  script:
+    - google-closure-compiler --js src/js/*.js --js_output_file tmp/index.min.js --warning_level QUIET
+  artifacts:
+    paths:
+      - tmp/index.min.js
+
+deploy:
+  stage: deploy
+  only:
+    refs:
+      - master
+  before_script:
+    - mkdir -p dist/css
+  script:
+    - cp -r src/img/ dist/img/
+    - cp -r tmp/* dist/
+    # Copy previous minified css files
+    - cp src/css/*.min.* dist/css
+  artifacts:
+    paths:
+      - dist
