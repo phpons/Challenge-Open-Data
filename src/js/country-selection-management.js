@@ -44,7 +44,7 @@ function createDeleteElement (countryPath, countryManagement) {
 
 function createCountryElement (countryId) {
   const countryElement = document.createElement('div')
-  countryElement.classList.add('tags', 'has-addons')
+  countryElement.classList.add('tags', 'are-medium', 'has-addons')
   countryElement.setAttribute('id', `${countryId}-tag`)
   return countryElement
 }

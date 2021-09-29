@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Challenge Open Data</title>
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/bulma.min.css">
   <link rel="stylesheet" href="css/bulma-slider.min.css">
   <link rel="stylesheet" media="print" href="css/print.css">
@@ -76,26 +77,30 @@
       <!-- Selected countries -->
       <div id="selected-countries" class="is-justify-content-center field is-grouped is-grouped-multiline"></div>
       <!-- Chart -->
+      <div id="chart-subtitle" class="subtitle is-hidden">Graphique</div>
       <div id="chart"></div>
     </div>
 
     <!-- Documentation -->
     <div id="documentation" class="is-hidden content">
       <p>
-        Ce projet s'incrit dans le cadre de la <strong> 3ème année ISI</strong> à l'
-        <a href="https://ensimag.grenoble-inp.fr/" target="_blank">Ensimag</a>. Le cours de
+        Ce projet s'inscrit dans le cadre de la <strong> 3ème année ISI</strong> à
+        l'<a href="https://ensimag.grenoble-inp.fr/" target="_blank">Ensimag</a>. Le cours de
         <strong><q>Challenge Open Data</q></strong> a pour objectif de développer une application Web de visualisation
-        interactive de données. Cette page Web a été conçu en <strong>une semaine</strong> par Léa BARRAU, Manon BLANCO,
-        Alexandre PILLEYRE, Pedro Henrique PONS FIORENTIN et Léa SOLO KWAN
+        interactive de données. Cette page Web a été conçue en <strong>une semaine</strong> par Léa BARRAU, Manon
+        BLANCO, Alexandre PILLEYRE, Pedro Henrique PONS FIORENTIN et Léa SOLO KWAN
       </p>
       <hr />
 
       <h1 class="title">Jeux de données</h1>
       <p>
-        Nos données sont servies par l’API de <a href=" https://www.worldbank.org" target="_blank">World Bank</a>.
+        Nos données sont servies par <a href=" https://www.worldbank.org" target="_blank">World Bank</a>.
         Nous utilisons notamment les données concernant la <strong>pauvreté</strong>, les <strong>inégalités</strong> et
-        l’<strong>environnement</strong>. Une description de leur API est disponible
-        <a href="https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information" target="_blank">ici</a>.
+        l’<strong>environnement</strong>. De plus, pour <strong>afficher notre carte</strong>, nous avons utilisé les
+        données venant de <a href="https://www.datavis.fr/" target="_blank">Datavis</a> pour avoir à notre disposition
+        <a href="https://www.datavis.fr/d3js/map-improve/world-countries-no-antartica.json" target="_blank">
+          les coordonnées de tous les pays du monde.
+        </a>
       </p>
       <div class="subtitle">Données libres</div>
       <p>
@@ -106,12 +111,6 @@
           You may extract, download, and make copies of the data contained in the Datasets, and you may share that data
           with third parties according to these terms of use.
         </q>
-        Malheureusement, nous n’avons pas pu vérifier les conditions d’utilisation de l’API puisque le
-        <a href="http://www.worldbank.org/terms" target="_blank">lien mentionné</a> dans leur
-        <strong>documentation est invalide</strong>. Mais l’API étant utilisée par
-        <a href="http://lig-tdcge.imag.fr/~sylvain/opendata/2020-2021/allalio-elmourim-elmouraa-foulont-gaisnea/index.html" target="_blank">
-        un groupe précédent</a> nous en avons déduit que <strong>son utilisation était autorisée</strong> dans le
-        cadre de ce projet.
       </p>
       <div class="subtitle">Indicateurs et données utilisés</div>
       <p>
@@ -122,7 +121,10 @@
       </p>
       <ul>
         <li>des émissions de CO₂</li>
-        <li>de l’<a href="https://www.insee.fr/fr/metadonnees/definition/c1551" target="_blank">indice de GINI</a> estimé par World Bank</li>
+        <li>
+          de l’<a href="https://www.insee.fr/fr/metadonnees/definition/c1551" target="_blank">indice de GINI</a>
+          estimé par World Bank
+        </li>
         <li>du PIB par pays</li>
         <li>du taux de chômage</li>
         <li>de la part de consommation utilisant les énergies renouvelables</li>
@@ -135,36 +137,12 @@
 
       <hr />
 
-      <h1 class="title">Traitements opérés</h1>
-      <p>
-        Pour des questions de <strong>pérennité</strong>, nous avons choisi d'avoir les données disponibles
-        <a href="./js/data.js" target="_blank">directement sur notre site</a>. Nous avons choisi le format
-        <strong>CSV</strong> pour répondre aux <strong>contraintes de taille</strong> de notre site. En effet, celui-ci
-        doit faire <strong>moins de 10Mo</strong>.
-      </p>
-      <div class="subtitle">Récupération des données</div>
-      <p>
-        Dans un premier temps, nous avons <strong>téléchargé</strong> toutes les données au format CSV depuis le site de
-        World Bank. Leur site propose d'accéder facilement à leurs données dans des formats prédéterminés (API, XLS,
-        CSV, DataBank).
-      </p>
-      <div class="subtitle">Nettoyage et agrégation des données</div>
-      <p>
-        Afin de répondre aux contraintes de taille, nous avons décidé d'agréger toutes les données dans un
-        <strong>unique fichier CSV</strong> afin d'éviter le dédoublement d'information. De plus, nous avons aussi
-        réduit le nombre de données en limitant les dates utilisées. Les données disponibles sur notre site datent de
-        <strong>2010 au plus tôt</strong>. Ce dernier choix, nous permet aussi de nettoyer nos données puisque qu'avant
-        2010, les informations ne sont pas toujours présentes pour tous les pays. Pour réaliser cette tâche, nous avons
-        écrit un script <a href="https://www.python.org/" target="_blank">Python</a> utilisant la librairie
-        <a href="https://pandas.pydata.org/" target="_blank">Pandas</a>.
-      </p>
-
-      <hr />
-
       <h1 class="title">Choix des technologies</h1>
       <p>
-        Notre site utilise évidemment les <strong>langagues Web de base</strong> (HTML, CSS et Javascript). Mais
-        concernant les représentations graphiques nous avons dû faire certains choix techniques.
+        Notre site utilise évidemment les <strong>langages Web de base</strong> (HTML, CSS et JavaScript). Mais
+        concernant les représentations graphiques nous avons dû faire certains choix techniques. Ici aussi pour des
+        questions de <strong>pérennité</strong>, nous avons choisi d'avoir le code minifié des librairies utilisées
+        <strong>directement sur notre site</strong>.
       </p>
       <div class="subtitle">Heatmap et Graphiques</div>
       <p>
@@ -180,32 +158,119 @@
 
       <hr />
 
-      <h1 class="title">Workflow</h1>
+      <h1 class="title">Traitements opérés</h1>
+      <p>
+        Pour des questions de <strong>pérennité</strong>, nous avons choisi d'avoir les données disponibles
+        <strong>directement sur notre site</strong>. Nous avons choisi le format
+        <strong>CSV</strong> pour répondre aux <strong>contraintes de taille</strong> de notre site. En effet, celui-ci
+        doit faire <strong>moins de 10Mo</strong>.
+      </p>
+      <div class="subtitle">Récupération des données</div>
+      <p>
+        Dans un premier temps, nous avons <strong>téléchargé</strong> toutes les données au format CSV depuis le site de
+        World Bank. Leur site propose d'accéder facilement à leurs données dans des formats prédéterminés (API, XLS,
+        CSV, DataBank).
+      </p>
+      <div class="subtitle">Nettoyage et agrégation des données</div>
+      <p>
+        Pour répondre aux contraintes de taille, nous avons décidé d'agréger toutes les données dans un
+        <strong>unique fichier CSV</strong> afin d'éviter le dédoublement d'information. Aussi, à des fins
+        d'unification, nous avons ajouté les codes ISO des pays dans ce fichier CSV pour que nos données provenant de
+        World Bank et de Datavis soient <strong>compatibles</strong>. Pour réaliser cette tâche, nous avons écrit un
+        script <a href="https://www.python.org/" target="_blank">Python</a> utilisant les librairies
+        <a href="https://pandas.pydata.org/" target="_blank">Pandas</a>,
+        <a href="https://numpy.org/" target="_blank">NumPy</a> et
+        <a href="https://pypi.org/project/pycountry/" target="_blank">PyCountry</a>.
+      </p>
+      <div class="subtitle">Résumé</div>
       <p>
         Le schéma ci-dessous résume le traitement des données qui a été fait et les choix technologiques :
       </p>
-      <img class="is-flex is-justify-content-center" src="TODO" alt="Résumé des traitements des données et des choix technologiques" />
+      <div class="has-text-centered">
+        <img src="img/workflow.png" alt="Résumé des traitements des données et des choix technologiques" />
+      </div>
+      <p>
+        Nous avons vérifié les conditions d'utilisation des logos. Pour Python on peut lire sur
+        <a href="https://www.python.org/community/logos/">leur site</a> :
+        <q>
+          Projects and companies that use Python are encouraged to incorporate the Python logo on their websites,
+          brochures, packaging, and elsewhere to indicate suitability for use with Python or implementation in Python.
+          Use of the "two snakes" logo element alone, without the accompanying wordmark is permitted on the same terms
+          as the combined logo.
+        </q>
+        Concernant la librairie D3.js, elle est gérée par la
+        <a href="https://opensource.org/licenses/BSD-3-Clause" target="_blank">licence BSD</a> dont on peut lire :
+        <q>
+          Redistribution and use in source and binary forms, with or without modification, are permitted [...]
+        </q>
+      </p>
 
       <hr />
 
       <h1 class="title">Architecture</h1>
       <p>
-        Notre avons voulu que notre application reste <strong>minimale</strong>. Pour cela, nous avons découpé notre
-        projet selon les langagues de notre projet. Nous avons donc:
+        Pour obtenir le <strong>meilleur score de GreenIT Analysis</strong> (voir plus bas) et pour répondre aux
+        <strong>contraintes de taille</strong>, l'architecture de notre site est différente entre le code source et le
+        code minifié que nous avons rendu.
+      </p>
+      <div class="subtitle">Code source</div>
+      <p>
+        Nous avons voulu que notre application reste <strong>minimale</strong>. Pour cela, nous avons découpé notre
+        projet selon les langages utilisés. Nous avons donc:
       </p>
       <ul>
         <li>un fichier <code>index.html</code> qui est l'entrée de notre page Web</li>
-        <li>un dossier <code>js</code> qui contient tous les fichiers Javascript</li>
+        <li>un dossier <code>js</code> qui contient tous les fichiers JavaScript</li>
         <li>un dossier <code>css</code> qui contient tous les fichiers CSS</li>
+        <li>un dossier <code>img</code> qui contient toutes les images utilisées</li>
       </ul>
+      <p>
+        Le code source est disponible sur GitLab avec
+        <a href="https://gitlab.ensimag.fr/pilleyra/5mmcod7_world_inequality" target="_blank">ce lien</a>.
+      </p>
+      <div class="subtitle">Code minifié</div>
+      <p>
+        Nous avons utilisé différents minifier en fonction des langages de programmation :
+      </p>
+      <ul>
+        <li>
+          pour minifier l'HTML nous avons utilisé
+          <a href="https://www.npmjs.com/package/html-minifier" target="_blank">html-minifier</a> et quelques commandes
+          shell pour adapter notre fichier en fonction des autres fichiers minifiés
+        </li>
+        <li>
+          pour minifier le CSS nous avons utilisé
+          <a href="https://www.npmjs.com/package/css-minify" target="_blank">css-minify</a> et avons récupéré
+          directement le code minifié de Bulma
+        </li>
+        <li>
+          pour minifier le JavaScript nous avons directement récupéré le code minifié de D3.js et avons utilisé
+          <a href="https://www.npmjs.com/package/google-closure-compiler" target="_blank">google-closure-compiler</a>
+          qui fusionne tous les fichiers JavaScript en un seul
+        </li>
+      </ul>
+      <p>
+        Nous avons <strong>automatisé</strong> la minification grâce à
+        l'<a href="https://docs.gitlab.com/ee/ci/" target="_blank">intégration continue de GitLab</a>.
+      </p>
 
       <hr />
 
       <h1 class="title">Résultat de l'analyse de notre page web</h1>
+      <p>Nous avons analysé notre page web avec différents outils :</p>
+      <ul>
+        <li>
+          <strong>GreenIT Analysis</strong> pour voir l'impact de notre page Web sur l'<strong>environnement</strong>
+        </li>
+        <li>
+          les <strong>standards W3C</strong> qui permettent de favoriser l'<strong>accès au web</strong> au plus grand
+          nombre
+        </li>
+      </ul>
       <div class="subtitle">GreenIT Analysis</div>
       <p>
         Comme on peut le lire sur
-        <a href="https://github.com/cnumr/GreenIT-Analysis/blob/master/README.md" target="_blank">le github de
+        <a href="https://github.com/cnumr/GreenIT-Analysis/blob/master/README.md" target="_blank">le GitHub de
           leur projet</a> :
         <q>
           GreenIT Analysis est une extension pour navigateur qui permet de quantifier les impacts environnementaux d'un
@@ -213,13 +278,39 @@
           vérifie également l'utilisation de bonnes pratiques visant à diminuer ces impacts.
         </q>
       </p>
-      <p>Le résultat de cette analyse sur notre page Web est le suivant :</p>
-      <img class="is-flex is-justify-content-center" src="TODO" alt="Résultat de l'analyse de notre page Web par GreenIT Analysis" />
+      <p>
+        Nous avons lancé l'analyseur sur notre <strong>code minifié</strong> et <strong>en local</strong>. Le résultat
+        de cette analyse sur notre page Web est différent selon le navigateur utilisé.
+      </p>
+      <div class="subtitle is-6">Google Chrome</div>
+      <p>
+        L'extension sur Google Chrome ne voit pas le <strong>print CSS</strong> qui est pourtant fourni par notre site.
+      </p>
+      <div class="has-text-centered">
+        <img
+          src="img/google_result.png"
+          alt="Résultat de l'analyse de notre page Web par GreenIT Analysis avec le navigateur Google Chrome"
+        />
+      </div>
+
+      <div class="subtitle is-6">Firefox</div>
+      <p>
+        Contrairement aux résultats précédents, l'extension sur Firefox remarque le <strong>print CSS</strong>. On peut
+        aussi voir que l'<strong>EcoIndex</strong> est moins bon qu'avec Google Chrome. Par contre la
+        <strong>consommation d'eau</strong> et de <strong>GES</strong> sont meilleures.
+      </p>
+      <div class="has-text-centered">
+        <img
+          src="img/firefox_result.png"
+          alt="Résultat de l'analyse de notre page Web par GreenIT Analysis avec le navigateur Firefox"
+        />
+      </div>
       <div class="subtitle">Standards W3C</div>
       <p>
         Nous avons tenu à ce que notre page Web corresponde aux
         <a href="https://www.w3c.fr/standards" target="_blank">standards W3C</a>. Nous avons donc utilisé
-        <a href="https://validator.w3.org" target="_blank">leur validateur HTML</a> pour valider notre page.
+        <a href="https://validator.w3.org" target="_blank">leur validateur HTML</a> sur notre page. Cette
+        vérification a été automatisée grâce à l'<strong>intégration continue de GitLab</strong>.
       </p>
     </div>
   </main>
@@ -255,4 +346,5 @@
   <script src="js/utils.js"></script>
   <script src="js/index.js"></script>
 </body>
+
 </html>
