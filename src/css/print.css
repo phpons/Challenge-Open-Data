@@ -24,3 +24,35 @@ a {
 a[href]::after {
   content: " (" attr(href) ")"; /* affichage des URL des liens */
 }
+
+#parameters {
+  display: none !important;
+}
+
+.tag {
+  font-size: 1.5em !important;
+}
+
+.is-info {
+  color: #3e8ed0 !important;
+}
+
+.is-success {
+  color: #48c78e !important;
+}
+
+.is-warning {
+  color: #ffe08a !important;
+}
+
+.is-primary {
+  color: #00d1b2 !important;
+}
+
+.is-danger {
+  color: #f14668 !important;
+}
+
+.is-link {
+  color: #485fc7 !important;
+}
