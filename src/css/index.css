@@ -16,18 +16,8 @@ main {
   right: 0;
 }
 
-div.tooltip {
-  position: absolute;
-  text-align: center;
-  color: black;
-  width: 275px;
-  height: 37px;
-  padding: 2px;
-  font: 12px sans-serif;
-  background: grey;
-  border: 0;
-  border-radius: 8px;
-  pointer-events: none;
+#indicator-year {
+  min-width: 10rem;
 }
 
 .heatmap-country-default {
@@ -46,7 +36,7 @@ div.tooltip {
 }
 
 #tooltip > polyline {
-  fill: #222b1d;
+  fill: #ebf4f8;
   stroke: black;
   opacity: 0.9;
   stroke-width: 1;
@@ -60,14 +50,9 @@ div.tooltip {
   stroke: #929292;
 }
 
-#tooltip > line {
-  stroke-width: 0.5;
-}
-
-#heatmap-title,
 #tooltip-score,
 #tooltip > text {
-  fill: #c1d3b8;
+  fill: #bb633a;
 }
 
 #tooltip > text {
@@ -79,15 +64,9 @@ div.tooltip {
   font-size: 16px;
 }
 
-#map #svg {
+#svg {
   border: 2px solid lightgrey;
   border-radius: 0.5rem;
-}
-
-#chart #svg {
-  text-align: center;
-  margin: auto;
-  position: relative;
 }
 
 #tooltip-score {

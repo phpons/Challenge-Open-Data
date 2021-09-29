@@ -1,5 +1,7 @@
 'use strict'
 
+const CHART_SUBTITLE = document.getElementById('chart-subtitle')
+
 const MARGIN = { top: 30, right: 50, bottom: 30, left: 30 }
 const HORIZONTAL_POS = 5
 const VERTICAL_POS = 50
@@ -36,9 +38,10 @@ class Chart {
   }
 
   updateChart (evt) {
-    // TODO ajouter une indication des valeurs des courbes au passage de la souris (clic => affichage d'un histogramme ?)
+    CHART_SUBTITLE.classList.add('is-hidden')
     d3.select('#chart').select('svg').remove()
     if (this.countryManagement.getSelectedCountries().length > 0) {
+      CHART_SUBTITLE.classList.remove('is-hidden')
       this.svg = d3.select('#chart').append('svg')
         .attr('id', 'svg-chart')
         .attr('width', this.width + MARGIN.left + MARGIN.right)
