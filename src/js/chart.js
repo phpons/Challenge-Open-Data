@@ -21,6 +21,7 @@ class Chart {
   }
 
   resize (evt) {
+    if (!this.svg) return
     this.width = document.getElementById('visualisation').offsetWidth * 0.95 - (MARGIN.left + MARGIN.right)
     this.svg.attr('width', this.width)
     this.updateChart()
@@ -39,7 +40,7 @@ class Chart {
     d3.select('#chart').select('svg').remove()
     if (this.countryManagement.getSelectedCountries().length > 0) {
       this.svg = d3.select('#chart').append('svg')
-        .attr('id', 'svg')
+        .attr('id', 'svg-chart')
         .attr('width', this.width + MARGIN.left + MARGIN.right)
         .attr('height', this.height + MARGIN.top + MARGIN.bottom)
         .attr('transform', 'translate(0, 0)')

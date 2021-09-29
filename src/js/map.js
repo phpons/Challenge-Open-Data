@@ -1,7 +1,7 @@
 'use strict'
 
 const WIDTH = document.getElementById('visualisation').offsetWidth
-const HEIGHT = adjustHeight(WIDTH)
+const HEIGHT = document.body.offsetHeight * 0.6
 const COLORS = [
   '#b0d3e3',
   '#88bdd6',
@@ -17,11 +17,10 @@ function shortCountryName (country) {
 }
 
 function adjustHeight (width) {
-  const height = document.body.offsetHeight * 0.6
-  if (height > width) {
+  if (HEIGHT > width) {
     return width
   } else {
-    return height
+    return HEIGHT
   }
 }
 
