@@ -87,7 +87,7 @@ class Chart {
           .datum(this.csvDatas.filter((val) => val[COUNTRY_CODE_COLUMN] === value && this.isValidValue(val)))
           .style('fill', 'none')
           .style('stroke', BULMA_COLORS[this.countryManagement.getColor(value)])
-          .style('stroke-width', '1px')
+          .style('stroke-width', '2px')
           .style('opacity', '1')
           .attr('d', line)
       })

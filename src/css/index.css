@@ -72,3 +72,28 @@ main {
 #tooltip-score {
   font-weight: bold;
 }
+
+.tag.is-info {
+  background-color: #3e8ed0 !important;
+}
+
+.tag.is-success {
+  background-color: #198038 !important;
+}
+
+.tag.is-warning {
+  color: white !important;
+  background-color: #ffa600 !important;
+}
+
+.tag.is-primary {
+  background-color: #003f5c !important;
+}
+
+.tag.is-danger {
+  background-color: #dd5182 !important;
+}
+
+.tag.is-link {
+  background-color: #485fc7 !important;
+}

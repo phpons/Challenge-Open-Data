@@ -2,10 +2,10 @@
 
 const BULMA_COLORS = {
   info: '#3e8ed0',
-  success: '#48c78e',
-  warning: '#ffe08a',
-  primary: '#00d1b2',
-  danger: '#f14668',
+  success: '#198038',
+  warning: '#ffa600',
+  primary: '#003f5c',
+  danger: '#dd5182',
   link: '#485fc7'
 }
 const NB_COLORS = Object.keys(BULMA_COLORS).length
