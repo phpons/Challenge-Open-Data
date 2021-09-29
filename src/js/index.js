@@ -2,7 +2,8 @@
 
 // eslint-disable-next-line no-unused-vars
 const { CSV_VALUES, CSV_HEADERS } = parseCSV(CSV_DATA)
-
+// resize the map after print
+let mapWidthSave
 function updateEvents (map, chart) {
   // Navbar
   const navbarBurger = document.getElementById('navbar-burger')
@@ -44,6 +45,17 @@ function updateEvents (map, chart) {
 
   document.getElementById('map').addEventListener('click', chart.updateChart.bind(chart))
   document.getElementById('selected-countries').addEventListener('click', chart.updateChart.bind(chart))
+
+  window.addEventListener('beforeprint', () => {
+    mapWidthSave = document.getElementById('visualisation').style.width
+    document.getElementById('visualisation').style.width = '1150px'
+    map.resize()
+  })
+
+  window.addEventListener('afterprint', () => {
+    document.getElementById('visualisation').style.width = mapWidthSave
+    map.resize()
+  })
 }
 
 function main () {
