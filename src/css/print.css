@@ -28,19 +28,19 @@ a[href]::after {
 }
 
 .is-success {
-  color: #48c78e !important;
+  color: #198038 !important;
 }
 
 .is-warning {
-  color: #ffe08a !important;
+  color: #ffa600 !important;
 }
 
 .is-primary {
-  color: #00d1b2 !important;
+  color: #003f5c !important;
 }
 
 .is-danger {
-  color: #f14668 !important;
+  color: #dd5182 !important;
 }
 
 .is-link {
