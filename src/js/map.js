@@ -1,6 +1,6 @@
 'use strict'
 
-const WIDTH = document.getElementById('visualisation').offsetWidth
+const WIDTH = document.getElementById('visualization').offsetWidth
 const HEIGHT = document.body.offsetHeight * 0.6
 const COLORS = [
   '#b0d3e3',
@@ -428,7 +428,7 @@ class WorldHeatMap {
   }
 
   resize (evt) {
-    this.width = document.getElementById('visualisation').offsetWidth
+    this.width = document.getElementById('visualization').offsetWidth
     this.height = adjustHeight(this.width)
     this.svg.attr('width', this.width).attr('height', this.height)
     this.d3Title.attr('x', this.width / 2)

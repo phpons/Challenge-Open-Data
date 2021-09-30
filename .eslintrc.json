@@ -9,30 +9,42 @@
   "parserOptions": {
     "ecmaVersion": 12
   },
-  "rules": {
-  },
-  "ignorePatterns": ["*.min.js"],
+  "rules": {},
+  "ignorePatterns": [
+    "*.min.js"
+  ],
   "globals": {
     // Global variables
+    // d3
     "d3": true,
-    "selectedYear": true,
-    "selectedIndicator": true,
+    // bulma-slider
     "bulmaSlider": true,
-    "CSV_DATA": true,
-    "CSV_HEADERS": true,
-    "CSV_VALUES": true,
-    "WORLD_MAP_JSON": true,
-    "WIDTH": true,
-    "BULMA_COLORS": true,
+    // year-range
+    "selectedYear": true,
+    // indicators
+    "selectedIndicator": true,
+    "selectedIndicatorScatter": true,
+    // data
     "YEAR_COLUMN": true,
     "COUNTRY_CODE_COLUMN": true,
     "COUNTRY_NAME_COLUMN": true,
     "POPULATION_COLUMN": true,
     "PIB_COLUMN": true,
+    "CSV_DATA": true,
+    // index
+    "CSV_HEADERS": true,
+    "CSV_VALUES": true,
+    // world-countries-no-antartica
+    "WORLD_MAP_JSON": true,
+    // country-selection-management
+    "BULMA_COLORS": true,
     // Global classes
     "WorldHeatMap": true,
     "CountryManagement": true,
     "Chart": true,
+    "LineChart": true,
+    "ScatterChart": true,
+    "BarChart": true,
     // Global functions
     // notification
     "displayNotification": true,

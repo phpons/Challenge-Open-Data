@@ -2,9 +2,21 @@
 
 // eslint-disable-next-line no-unused-vars
 const { CSV_VALUES, CSV_HEADERS } = parseCSV(CSV_DATA)
-// resize the map after print
+const CHARTS_ELEMENT = document.getElementById('charts')
+
 let mapWidthSave
-function updateEvents (map, chart) {
+
+function updateCharts (countryManagement, lineChart, barChart) {
+  if (countryManagement.getSelectedCountries().length) {
+    CHARTS_ELEMENT.classList.remove('is-hidden')
+    lineChart.updateChart()
+    barChart.updateChart()
+  } else {
+    CHARTS_ELEMENT.classList.add('is-hidden')
+  }
+}
+
+function updateEvents (map, countryManagement, lineChart, barChart, scatterChart) {
   // Navbar
   const navbarBurger = document.getElementById('navbar-burger')
   navbarBurger.addEventListener('click', (evt) => {
@@ -18,10 +30,19 @@ function updateEvents (map, chart) {
     .getElementById('indicators-select')
     .addEventListener('change', (evt) => {
       selectedIndicator = evt.target.value
+
       map.valuesColumn = selectedIndicator
       map.updateDisplay()
-      chart.selectedIndicator = selectedIndicator
-      chart.updateChart()
+
+      lineChart.selectedIndicator = selectedIndicator
+      lineChart.updateChart()
+
+      barChart.selectedIndicator = selectedIndicator
+      barChart.updateChart()
+
+      scatterChart.selectedIndicatorX = selectedIndicator
+      scatterChart.updateChart()
+
       updateYearRange(selectedIndicator)
     })
 
@@ -31,29 +52,50 @@ function updateEvents (map, chart) {
       selectedYear = evt.target.value
       map.currentYear = selectedYear
       map.updateDisplay()
+
+      barChart.currentYear = selectedYear
+      barChart.updateChart()
+
+      scatterChart.currentYear = selectedYear
+      scatterChart.updateChart()
+    })
+
+  document
+    .getElementById('scatter-select')
+    .addEventListener('change', (evt) => {
+      selectedIndicatorScatter = evt.target.value
+      scatterChart.selectedIndicatorY = selectedIndicatorScatter
+      scatterChart.updateChart()
     })
 
   // Map
   window.addEventListener('resize', (evt) => {
     map.resize()
-    chart.resize()
+    lineChart.resize()
+    barChart.resize()
+    scatterChart.resize()
   })
 
-  document
-    .getElementById('reset-zoom-button')
-    .addEventListener('click', map.resetZoom.bind(map))
+  document.getElementById('reset-zoom-button').addEventListener('click', map.resetZoom.bind(map))
 
-  document.getElementById('map').addEventListener('click', chart.updateChart.bind(chart))
-  document.getElementById('selected-countries').addEventListener('click', chart.updateChart.bind(chart))
+  document.getElementById('map').addEventListener('click', (evt) => {
+    updateCharts(countryManagement, lineChart, barChart)
+  })
 
+  // Selected countries
+  document.getElementById('selected-countries').addEventListener('click', (evt) => {
+    updateCharts(countryManagement, lineChart, barChart)
+  })
+
+  // Print
   window.addEventListener('beforeprint', () => {
-    mapWidthSave = document.getElementById('visualisation').style.width
-    document.getElementById('visualisation').style.width = '1150px'
+    mapWidthSave = document.getElementById('visualization').style.width
+    document.getElementById('visualization').style.width = '1150px'
     map.resize()
   })
 
   window.addEventListener('afterprint', () => {
-    document.getElementById('visualisation').style.width = mapWidthSave
+    document.getElementById('visualization').style.width = mapWidthSave
     map.resize()
   })
 }
@@ -74,13 +116,28 @@ function main () {
     [POPULATION_COLUMN, PIB_COLUMN]
   )
 
-  const chart = new Chart(
+  const lineChart = new LineChart(
     CSV_VALUES,
-    selectedIndicator,
-    countryManagement
+    countryManagement,
+    selectedIndicator
   )
 
-  updateEvents(map, chart)
+  const barChart = new BarChart(
+    CSV_VALUES,
+    countryManagement,
+    selectedIndicator,
+    selectedYear
+  )
+
+  const scatterChart = new ScatterChart(
+    CSV_VALUES,
+    countryManagement,
+    selectedIndicator,
+    selectedIndicatorScatter,
+    selectedYear
+  )
+
+  updateEvents(map, countryManagement, lineChart, barChart, scatterChart)
 }
 
 // Use window.onload event to launch the main function when loading process has ended

@@ -6,6 +6,13 @@ main {
   flex: 1;
 }
 
+#parameters {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
 #logo-ensimag {
   max-height: none;
 }
@@ -96,4 +103,8 @@ main {
 
 .tag.is-link {
   background-color: #485fc7 !important;
+}
+
+#scatter-chart {
+  width: 2/3%;
 }

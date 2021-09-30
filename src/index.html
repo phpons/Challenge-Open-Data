@@ -51,8 +51,8 @@
   <!-- Main -->
   <main class="container is-fluid mt-3 mb-3">
 
-    <!-- Visualisation -->
-    <div id="visualisation" class="is-justify-content-center">
+    <!-- Visualization -->
+    <div id="visualization" class="is-justify-content-center">
       <!-- Parameters -->
       <div class="columns is-multiline" id="parameters">
         <div class="column is-narrow">
@@ -76,9 +76,52 @@
 
       <!-- Selected countries -->
       <div id="selected-countries" class="is-justify-content-center field is-grouped is-grouped-multiline"></div>
-      <!-- Chart -->
-      <div id="chart-subtitle" class="subtitle is-hidden">Graphique</div>
-      <div id="chart"></div>
+
+      <!-- Charts -->
+      <div id="charts" class="is-hidden">
+        <div class="columns">
+          <div class="column is-one-third">
+            <div class="subtitle has-text-centered">Graphique Linéaire</div>
+            <p>Ce graphique permet de comparer directement les valeurs de l'indicateur pour les pays sélectionnés pour toutes les années.</p>
+            <p>Vous pouvez choisir l'indicateur dans la barre de navigation ci-dessus.</p>
+            <p>Vous pouvez survoler les points pour voir les valeurs exactes.</p>
+          </div>
+          <div class="column is-two-thirds">
+            <canvas id="line-chart"></canvas>
+          </div>
+        </div>
+
+        <hr />
+  
+        <div class="columns">
+          <div class="column is-one-third">
+            <div class="subtitle has-text-centered">Bar Chart</div>
+            <p>Ce graphique permet de comparer directement les valeurs des indicateurs pour les pays sélectionnés sur une année donnée.</p>
+            <p>Vous pouvez choisir l'indicateur et l'année dans la barre de navigation ci-dessus.</p>
+            <p>Vous pouvez survoler les barres pour voir les valeurs exactes.</p>
+          </div>
+          <div class="column is-two-thirds">
+            <canvas id="bar-chart"></canvas>
+          </div>
+        </div>
+
+        <hr />
+  
+        <div class="columns">
+          <div class="column is-one-third">
+            <div class="subtitle has-text-centered">Scatter Chart</div>
+            <div class="select mb-3">
+              <select id="scatter-select"></select>
+            </div>
+            <p>Choisissez deux indicateurs et <strong>observez la corrélation</strong> entre eux.</p>
+            <p>Chaque point représente un pays et sa position sur les axes.</p>
+            <p>Vous pouvez survoler les points pour voir les valeurs exactes de chaque indicateur.</p>
+          </div>
+          <div class="column is-two-thirds">
+            <canvas id="scatter-chart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Documentation -->
@@ -105,8 +148,8 @@
       <div class="subtitle">Données libres</div>
       <p>
         Nous avons vérifié que les données utilisées sont <strong>libres</strong>. En effet, dans les
-        <a href="https://www.worldbank.org/en/about/legal/terms-of-use-for-datasets" target="_blank">conditions
-          d’utilisation</a> nous pouvons lire :
+        <a href="https://www.worldbank.org/en/about/legal/terms-of-use-for-datasets" target="_blank">conditions d’utilisation</a>
+        nous pouvons lire :
         <q>
           You may extract, download, and make copies of the data contained in the Datasets, and you may share that data
           with third parties according to these terms of use.
@@ -128,6 +171,7 @@
         <li>du PIB par pays</li>
         <li>du taux de chômage</li>
         <li>de la part de consommation utilisant les énergies renouvelables</li>
+        <li>de la population par pays</li>
       </ul>
       <p>
         Nous avons spécifiquement choisi ces indicateurs, car ils ont tous un lien avec le
@@ -224,10 +268,6 @@
         <li>un dossier <code>css</code> qui contient tous les fichiers CSS</li>
         <li>un dossier <code>img</code> qui contient toutes les images utilisées</li>
       </ul>
-      <p>
-        Le code source est disponible sur GitLab avec
-        <a href="https://gitlab.ensimag.fr/pilleyra/5mmcod7_world_inequality" target="_blank">ce lien</a>.
-      </p>
       <div class="subtitle">Code minifié</div>
       <p>
         Nous avons utilisé différents minifier en fonction des langages de programmation :
@@ -336,12 +376,13 @@
 
   <!-- Scripts -->
   <script src="js/d3.min.js"></script>
+  <script src="js/chart.min.js"></script>
   <script src="js/bulma-slider.min.js"></script>
   <script src="js/country-selection-management.js"></script>
   <script src="js/indicators.js"></script>
   <script src="js/year-range.js"></script>
   <script src="js/map.js"></script>
-  <script src="js/chart.js"></script>
+  <script src="js/charts.js"></script>
   <script src="js/notifications.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/index.js"></script>
