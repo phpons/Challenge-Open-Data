@@ -6,7 +6,7 @@ const BAR_CHART_ID = 'bar-chart'
 const SCATTER_CHART_ID = 'scatter-chart'
 
 class BasicChart {
-  constructor (
+  constructor(
     csvDatas,
     countryManagement,
     selectedIndicator
@@ -50,7 +50,7 @@ class BasicChart {
 
 // eslint-disable-next-line no-unused-vars
 class LineChart extends BasicChart {
-  constructor (
+  constructor(
     csvDatas,
     countryManagement,
     selectedIndicator
@@ -59,17 +59,16 @@ class LineChart extends BasicChart {
 
     const options = {
       maintainAspectRatio: false,
+      title: {
+        text: '',
+        display: true
+      },
       scales: {
         yAxes: [{
           ticks: {
             beginAtZero: true
           }
         }]
-      },
-      legend: {
-        labels: {
-          boxWidth: 0
-        }
       }
     }
     this.chart = this.createChart(LINE_CHART_ID, 'line', options)
@@ -94,13 +93,13 @@ class LineChart extends BasicChart {
         fill: false,
         backgroundColor: BULMA_COLORS[this.countryManagement.getColor(value)],
         data: filteredData.map(val => +val[this.selectedIndicator]),
-        label: ''
+        label: filteredData.map(val => val[COUNTRY_NAME_COLUMN])[0]
       })
     })
 
     this.chart.data.datasets = datasets
     this.chart.data.labels = [...new Set(data.map(val => val[YEAR_COLUMN]))]
-    this.chart.data.datasets[0].label = this.selectedIndicator
+    this.chart.options.title.text = this.selectedIndicator
 
     this.chart.update()
   }
@@ -108,7 +107,7 @@ class LineChart extends BasicChart {
 
 // eslint-disable-next-line no-unused-vars
 class BarChart extends BasicChart {
-  constructor (
+  constructor(
     csvDatas,
     countryManagement,
     selectedIndicator,
@@ -160,7 +159,7 @@ class BarChart extends BasicChart {
 
 // eslint-disable-next-line no-unused-vars
 class ScatterChart extends BasicChart {
-  constructor (
+  constructor(
     csvDatas,
     countryManagement,
     selectedIndicator,
