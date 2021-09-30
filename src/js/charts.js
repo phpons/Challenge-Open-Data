@@ -225,15 +225,15 @@ class ScatterChart extends BasicChart {
     )
   }
 
-  setAxes(data, xAxisIndicator, yAxisIndicator) {
-    var maxValueXAxis = Math.max.apply(Math, data.map(function (v) { return v[xAxisIndicator]; }))
-    var minValueXAxis = Math.min.apply(Math, data.map(function (v) { return v[xAxisIndicator]; }))
+  setAxes (data, xAxisIndicator, yAxisIndicator) {
+    const maxValueXAxis = Math.max.apply(Math, data.map(function (v) { return v[xAxisIndicator] }))
+    const minValueXAxis = Math.min.apply(Math, data.map(function (v) { return v[xAxisIndicator] }))
 
     this.chart.options.scales.xAxes[0].ticks.max = maxValueXAxis
     this.chart.options.scales.xAxes[0].ticks.min = minValueXAxis
 
-    var maxValueYAxis = Math.max.apply(Math, data.map(function (v) { return v[yAxisIndicator]; }))
-    var minValueYAxis = Math.min.apply(Math, data.map(function (v) { return v[yAxisIndicator]; }))
+    const maxValueYAxis = Math.max.apply(Math, data.map(function (v) { return v[yAxisIndicator] }))
+    const minValueYAxis = Math.min.apply(Math, data.map(function (v) { return v[yAxisIndicator] }))
 
     this.chart.options.scales.yAxes[0].ticks.max = maxValueYAxis
     this.chart.options.scales.yAxes[0].ticks.min = minValueYAxis
@@ -242,7 +242,7 @@ class ScatterChart extends BasicChart {
   updateChart (evt) {
     this.chart.canvas.parentNode.style.height = CHART_HEIGHT
 
-    var rScale = d3.scaleSqrt().domain([0, 10e8]).range([0, 30])
+    const rScale = d3.scaleSqrt().domain([0, 10e8]).range([0, 30])
 
     const dataAllYears = this.csvDatas.filter((val) => this.isValidValue(val))
     const data = this.csvDatas.filter((val) => +val[YEAR_COLUMN] === +this.currentYear && this.isValidValue(val))
