@@ -179,6 +179,9 @@ class ScatterChart extends BasicChart {
         text: '',
         fontSize: 14
       },
+      animation: {
+        duration: 0
+      },
       legend: {
         display: false
       },
@@ -211,7 +214,7 @@ class ScatterChart extends BasicChart {
         }
       }
     }
-    this.chart = this.createChart(SCATTER_CHART_ID, 'scatter', options)
+    this.chart = this.createChart(SCATTER_CHART_ID, 'bubble', options)
     this.updateChart()
   }
 
@@ -222,9 +225,26 @@ class ScatterChart extends BasicChart {
     )
   }
 
+  setAxes(data, xAxisIndicator, yAxisIndicator) {
+    var maxValueXAxis = Math.max.apply(Math, data.map(function (v) { return v[xAxisIndicator]; }))
+    var minValueXAxis = Math.min.apply(Math, data.map(function (v) { return v[xAxisIndicator]; }))
+
+    this.chart.options.scales.xAxes[0].ticks.max = maxValueXAxis
+    this.chart.options.scales.xAxes[0].ticks.min = minValueXAxis
+
+    var maxValueYAxis = Math.max.apply(Math, data.map(function (v) { return v[yAxisIndicator]; }))
+    var minValueYAxis = Math.min.apply(Math, data.map(function (v) { return v[yAxisIndicator]; }))
+
+    this.chart.options.scales.yAxes[0].ticks.max = maxValueYAxis
+    this.chart.options.scales.yAxes[0].ticks.min = minValueYAxis
+  }
+
   updateChart (evt) {
     this.chart.canvas.parentNode.style.height = CHART_HEIGHT
 
+    var rScale = d3.scaleSqrt().domain([0, 10e8]).range([0, 30])
+
+    const dataAllYears = this.csvDatas.filter((val) => this.isValidValue(val))
     const data = this.csvDatas.filter((val) => +val[YEAR_COLUMN] === +this.currentYear && this.isValidValue(val))
     data.forEach(d => {
       d[this.selectedIndicator] = +d[this.selectedIndicator]
@@ -236,6 +256,8 @@ class ScatterChart extends BasicChart {
 
     this.chart.options.scales.xAxes[0].scaleLabel.labelString = xAxisIndicator
     this.chart.options.scales.yAxes[0].scaleLabel.labelString = yAxisIndicator
+
+    this.setAxes(dataAllYears, xAxisIndicator, yAxisIndicator)
 
     if (xAxisIndicator === PIB_COLUMN) {
       this.chart.options.scales.xAxes[0].type = 'logarithmic'
@@ -251,6 +273,7 @@ class ScatterChart extends BasicChart {
           return {
             x: row[xAxisIndicator],
             y: row[yAxisIndicator],
+            r: rScale(+row[POPULATION_COLUMN]),
             name: row[COUNTRY_NAME_COLUMN]
           }
         }),
