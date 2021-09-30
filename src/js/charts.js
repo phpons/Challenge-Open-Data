@@ -6,7 +6,7 @@ const BAR_CHART_ID = 'bar-chart'
 const SCATTER_CHART_ID = 'scatter-chart'
 
 class BasicChart {
-  constructor(
+  constructor (
     csvDatas,
     countryManagement,
     selectedIndicator
@@ -50,7 +50,7 @@ class BasicChart {
 
 // eslint-disable-next-line no-unused-vars
 class LineChart extends BasicChart {
-  constructor(
+  constructor (
     csvDatas,
     countryManagement,
     selectedIndicator
@@ -114,7 +114,7 @@ class LineChart extends BasicChart {
 
 // eslint-disable-next-line no-unused-vars
 class BarChart extends BasicChart {
-  constructor(
+  constructor (
     csvDatas,
     countryManagement,
     selectedIndicator,
@@ -180,7 +180,7 @@ class BarChart extends BasicChart {
 
 // eslint-disable-next-line no-unused-vars
 class ScatterChart extends BasicChart {
-  constructor(
+  constructor (
     csvDatas,
     countryManagement,
     selectedIndicator,
