@@ -1,14 +1,9 @@
 'use strict'
 
-// eslint-disable-next-line no-unused-vars
 const YEAR_COLUMN = 'Year'
-// eslint-disable-next-line no-unused-vars
 const COUNTRY_CODE_COLUMN = 'ISO_Country'
-// eslint-disable-next-line no-unused-vars
 const COUNTRY_NAME_COLUMN = 'Country_Name'
-// eslint-disable-next-line no-unused-vars
 const POPULATION_COLUMN = 'Population'
-// eslint-disable-next-line no-unused-vars
 const PIB_COLUMN = 'PIB par habitant ($ Américain actuel)'
 
 // eslint-disable-next-line no-unused-vars

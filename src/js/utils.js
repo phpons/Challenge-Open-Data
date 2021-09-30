@@ -1,22 +1,39 @@
 'use strict'
 
+const NAV_DOC_ID = 'nav-doc'
+const NAV_VISU_ID = 'nav-visu'
+
+const DOCUMENTATION_ELEMENT = document.getElementById('documentation')
+const VISUALIZATION_ELEMENT = document.getElementById('visualization')
+
+const NAV_DOC_ELEMENT = document.getElementById(NAV_DOC_ID)
+const NAV_VISU_ELEMENT = document.getElementById(NAV_VISU_ID)
+
+const TOOGLE = {
+  [NAV_DOC_ID]: {
+    navElement: NAV_DOC_ELEMENT,
+    element: DOCUMENTATION_ELEMENT
+  },
+  [NAV_VISU_ID]: {
+    navElement: NAV_VISU_ELEMENT,
+    element: VISUALIZATION_ELEMENT
+  }
+}
+
 // Permet de switcher entre la page documentation et la page visualisation de données
 // eslint-disable-next-line no-unused-vars
 function switchPage (id) {
-  const documentation = document.getElementById('documentation')
-  const visualization = document.getElementById('visualisation')
-  const navVisu = document.getElementById('nav-visu')
-  const navDoc = document.getElementById('nav-doc')
-  if (
-    (id === 'nav-doc' && documentation.classList.contains('is-hidden')) ||
-    (id === 'nav-visu' && visualization.classList.contains('is-hidden'))
-  ) {
-    visualization.classList.toggle('is-hidden')
-    documentation.classList.toggle('is-hidden')
-    navVisu.classList.toggle('is-active')
-    navDoc.classList.toggle('is-active')
-    window.dispatchEvent(new Event('resize'))
+  for (const currentId of Object.keys(TOOGLE)) {
+    if (currentId === id) {
+      TOOGLE[currentId].navElement.classList.add('is-active')
+      TOOGLE[currentId].element.classList.remove('is-hidden')
+    } else {
+      TOOGLE[currentId].navElement.classList.remove('is-active')
+      TOOGLE[currentId].element.classList.add('is-hidden')
+    }
   }
+
+  window.dispatchEvent(new Event('resize'))
 }
 
 // eslint-disable-next-line no-unused-vars
