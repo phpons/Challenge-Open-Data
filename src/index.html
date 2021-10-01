@@ -82,9 +82,11 @@
         <div class="columns">
           <div class="column is-one-third">
             <div class="subtitle has-text-centered">Graphique Linéaire</div>
-            <p>Ce graphique permet de comparer directement les valeurs de l'indicateur pour les pays sélectionnés pour toutes les années.</p>
-            <p>Vous pouvez choisir l'indicateur dans la barre de navigation ci-dessus.</p>
-            <p>Vous pouvez survoler les points pour voir les valeurs exactes.</p>
+            <div class="has-text-justified">
+              <p>Ce graphique permet de comparer directement les valeurs de l'indicateur pour les pays sélectionnés pour toutes les années.</p>
+              <p>Vous pouvez choisir l'indicateur dans la barre de navigation ci-dessus.</p>
+              <p>Vous pouvez survoler les points pour voir les valeurs exactes.</p>
+            </div>
           </div>
           <div class="column is-two-thirds">
             <canvas id="line-chart"></canvas>
@@ -92,13 +94,15 @@
         </div>
 
         <hr />
-  
+
         <div class="columns">
           <div class="column is-one-third">
             <div class="subtitle has-text-centered">Bar Chart</div>
-            <p>Ce graphique permet de comparer directement les valeurs des indicateurs pour les pays sélectionnés sur une année donnée.</p>
-            <p>Vous pouvez choisir l'indicateur et l'année dans la barre de navigation ci-dessus.</p>
-            <p>Vous pouvez survoler les barres pour voir les valeurs exactes.</p>
+            <div class="has-text-justified">
+              <p>Ce graphique permet de comparer directement les valeurs des indicateurs pour les pays sélectionnés sur une année donnée.</p>
+              <p>Vous pouvez choisir l'indicateur et l'année dans la barre de navigation ci-dessus.</p>
+              <p>Vous pouvez survoler les barres pour voir les valeurs exactes.</p>
+            </div>
           </div>
           <div class="column is-two-thirds">
             <canvas id="bar-chart"></canvas>
@@ -106,16 +110,18 @@
         </div>
 
         <hr />
-  
+
         <div class="columns">
           <div class="column is-one-third">
             <div class="subtitle has-text-centered">Scatter Chart</div>
             <div class="select mb-3">
               <select id="scatter-select"></select>
             </div>
-            <p>Choisissez deux indicateurs et <strong>observez la corrélation</strong> entre eux.</p>
-            <p>Chaque point représente un pays et sa position sur les axes.</p>
-            <p>Vous pouvez survoler les points pour voir les valeurs exactes de chaque indicateur.</p>
+            <div class="has-text-justified">
+              <p>Choisissez deux indicateurs et <strong>observez la corrélation</strong> entre eux.</p>
+              <p>Chaque point représente un pays et sa position sur les axes.</p>
+              <p>Vous pouvez survoler les points pour voir les valeurs exactes de chaque indicateur.</p>
+            </div>
           </div>
           <div class="column is-two-thirds">
             <canvas id="scatter-chart"></canvas>
@@ -327,10 +333,7 @@
         L'extension sur Google Chrome ne voit pas le <strong>print CSS</strong> qui est pourtant fourni par notre site.
       </p>
       <div class="has-text-centered">
-        <img
-          src="img/google_result.png"
-          alt="Résultat de l'analyse de notre page Web par GreenIT Analysis avec le navigateur Google Chrome"
-        />
+        <img src="img/google_result.png" alt="Résultat de l'analyse de notre page Web par GreenIT Analysis avec le navigateur Google Chrome" />
       </div>
 
       <div class="subtitle is-6">Firefox</div>
@@ -340,10 +343,7 @@
         <strong>consommation d'eau</strong> et de <strong>GES</strong> sont meilleures.
       </p>
       <div class="has-text-centered">
-        <img
-          src="img/firefox_result.png"
-          alt="Résultat de l'analyse de notre page Web par GreenIT Analysis avec le navigateur Firefox"
-        />
+        <img src="img/firefox_result.png" alt="Résultat de l'analyse de notre page Web par GreenIT Analysis avec le navigateur Firefox" />
       </div>
       <div class="subtitle">Standards W3C</div>
       <p>

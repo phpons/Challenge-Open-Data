@@ -40,7 +40,7 @@ function updateEvents (map, countryManagement, lineChart, barChart, scatterChart
       barChart.selectedIndicator = selectedIndicator
       barChart.updateChart()
 
-      scatterChart.selectedIndicatorX = selectedIndicator
+      scatterChart.selectedIndicator = selectedIndicator
       scatterChart.updateChart()
 
       updateYearRange(selectedIndicator)

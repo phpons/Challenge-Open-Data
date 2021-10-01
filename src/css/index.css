@@ -6,6 +6,10 @@ main {
   flex: 1;
 }
 
+p {
+  margin-bottom: 10px;
+}
+
 #parameters {
   background-color: white;
   position: sticky;
