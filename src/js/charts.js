@@ -59,20 +59,24 @@ class LineChart extends BasicChart {
 
     const options = {
       maintainAspectRatio: false,
+      title: {
+        text: '',
+        display: true
+      },
       scales: {
         yAxes: [{
           ticks: {
             beginAtZero: true
           }
         }]
-      },
-      legend: {
-        labels: {
-          boxWidth: 0
-        }
       }
     }
     this.chart = this.createChart(LINE_CHART_ID, 'line', options)
+  }
+
+  setAxisLimits (data, yAxisIndicator) {
+    const maxValueYAxis = Math.max.apply(Math, data.map(function (v) { return v[yAxisIndicator] }))
+    this.chart.options.scales.yAxes[0].ticks.max = maxValueYAxis
   }
 
   updateChart (evt) {
@@ -94,13 +98,15 @@ class LineChart extends BasicChart {
         fill: false,
         backgroundColor: BULMA_COLORS[this.countryManagement.getColor(value)],
         data: filteredData.map(val => +val[this.selectedIndicator]),
-        label: ''
+        label: filteredData.map(val => val[COUNTRY_NAME_COLUMN])[0]
       })
     })
 
+    this.setAxisLimits(data, this.selectedIndicator)
+
     this.chart.data.datasets = datasets
     this.chart.data.labels = [...new Set(data.map(val => val[YEAR_COLUMN]))]
-    this.chart.data.datasets[0].label = this.selectedIndicator
+    this.chart.options.title.text = this.selectedIndicator
 
     this.chart.update()
   }
@@ -131,15 +137,27 @@ class BarChart extends BasicChart {
         labels: {
           boxWidth: 0
         }
+      },
+      animation: {
+        duration: 0
       }
     }
     this.chart = this.createChart(BAR_CHART_ID, 'bar', options)
+  }
+
+  setAxisLimits (data, yAxisIndicator) {
+    const maxValueYAxis = Math.max.apply(Math, data.map(function (v) { return v[yAxisIndicator] }))
+    this.chart.options.scales.yAxes[0].ticks.max = maxValueYAxis
   }
 
   updateChart (evt) {
     if (!this.countryManagement.getSelectedCountries().length) return
     this.chart.canvas.parentNode.style.height = CHART_HEIGHT
 
+    const dataAllYears = this.csvDatas.filter((val) => (
+      this.countryManagement.getSelectedCountries().includes(val[COUNTRY_CODE_COLUMN]) &&
+      this.isValidValue(val)
+    ))
     const data = this.csvDatas.filter((val) => (
       this.countryManagement.getSelectedCountries().includes(val[COUNTRY_CODE_COLUMN]) &&
       +val[YEAR_COLUMN] === +this.currentYear &&
@@ -148,6 +166,8 @@ class BarChart extends BasicChart {
     data.forEach(d => {
       d[this.selectedIndicator] = +d[this.selectedIndicator]
     })
+
+    this.setAxisLimits(dataAllYears, this.selectedIndicator)
 
     this.chart.data.datasets[0].backgroundColor = data.map(val => BULMA_COLORS[this.countryManagement.getColor(val[COUNTRY_CODE_COLUMN])])
     this.chart.data.labels = data.map(val => val[COUNTRY_NAME_COLUMN])
@@ -178,6 +198,9 @@ class ScatterChart extends BasicChart {
         display: true,
         text: '',
         fontSize: 14
+      },
+      animation: {
+        duration: 0
       },
       legend: {
         display: false
@@ -211,7 +234,7 @@ class ScatterChart extends BasicChart {
         }
       }
     }
-    this.chart = this.createChart(SCATTER_CHART_ID, 'scatter', options)
+    this.chart = this.createChart(SCATTER_CHART_ID, 'bubble', options)
     this.updateChart()
   }
 
@@ -222,9 +245,26 @@ class ScatterChart extends BasicChart {
     )
   }
 
+  setAxisLimits (data, xAxisIndicator, yAxisIndicator) {
+    const maxValueXAxis = Math.max.apply(Math, data.map(function (v) { return v[xAxisIndicator] }))
+    const minValueXAxis = Math.min.apply(Math, data.map(function (v) { return v[xAxisIndicator] }))
+
+    this.chart.options.scales.xAxes[0].ticks.max = maxValueXAxis
+    this.chart.options.scales.xAxes[0].ticks.min = minValueXAxis
+
+    const maxValueYAxis = Math.max.apply(Math, data.map(function (v) { return v[yAxisIndicator] }))
+    const minValueYAxis = Math.min.apply(Math, data.map(function (v) { return v[yAxisIndicator] }))
+
+    this.chart.options.scales.yAxes[0].ticks.max = maxValueYAxis
+    this.chart.options.scales.yAxes[0].ticks.min = minValueYAxis
+  }
+
   updateChart (evt) {
     this.chart.canvas.parentNode.style.height = CHART_HEIGHT
 
+    const rScale = d3.scaleSqrt().domain([0, 10e8]).range([0, 30])
+
+    const dataAllYears = this.csvDatas.filter((val) => this.isValidValue(val))
     const data = this.csvDatas.filter((val) => +val[YEAR_COLUMN] === +this.currentYear && this.isValidValue(val))
     data.forEach(d => {
       d[this.selectedIndicator] = +d[this.selectedIndicator]
@@ -236,6 +276,8 @@ class ScatterChart extends BasicChart {
 
     this.chart.options.scales.xAxes[0].scaleLabel.labelString = xAxisIndicator
     this.chart.options.scales.yAxes[0].scaleLabel.labelString = yAxisIndicator
+
+    this.setAxisLimits(dataAllYears, xAxisIndicator, yAxisIndicator)
 
     if (xAxisIndicator === PIB_COLUMN) {
       this.chart.options.scales.xAxes[0].type = 'logarithmic'
@@ -251,6 +293,7 @@ class ScatterChart extends BasicChart {
           return {
             x: row[xAxisIndicator],
             y: row[yAxisIndicator],
+            r: rScale(+row[POPULATION_COLUMN]),
             name: row[COUNTRY_NAME_COLUMN]
           }
         }),
